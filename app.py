@@ -96,6 +96,11 @@ def init_connection():
 try: supabase: Client = init_connection()
 except Exception: st.error("Supabase Connection Error. Please check URL and Key.")
 
+def get_bani_footer():
+    bani_logo_base64 = get_base64_image("bani_logo_2.jpeg")
+    bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
+    return f'<div class="bani-footer">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
+
 def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mode, dept, bank_acc, on_account_of, collector=""):
     amount_text = f"Rs. {amount}/-"
     amount_in_words = f"Rupees {amount} Only" 
@@ -104,6 +109,7 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
     img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 100px; position: absolute; left: 30px; top: 20px;">' if logo_base64 else ''
     
     clinic_title = f"Makan {dept}"
+    bani_footer = get_bani_footer()
     
     html_content = f"""
     <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Receipt #{receipt_no}</title>
@@ -118,7 +124,7 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
             .main-content {{ font-size: 15px; line-height: 2.0; font-weight: bold; color: #222; }}
             .field-value {{ font-family: 'Courier New', monospace; font-size: 16px; color: #0F4C81; border-bottom: 1px solid #666; padding: 0 10px; }}
             .amount-box {{ font-size: 18px; font-weight: bold; color: #0F4C81; border: 2px solid #333; padding: 5px 20px; border-radius: 15px; display: inline-block; }}
-            .bani-footer {{ text-align: center; font-size: 11px; margin-top: 20px; color: #888; font-weight: bold; }}
+            .bani-footer {{ text-align: center; font-size: 11px; margin-top: 30px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center; }}
         </style></head>
     <body>
         <div class="receipt-box">
@@ -140,7 +146,7 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
                 <div style="text-align: right; padding-top: 10px;">Authorized Signatory</div>
             </div>
         </div>
-        <div class="bani-footer">Designed by Bani Tech Solutions | banitech.in</div>
+        {bani_footer}
         <script>window.onload = function() {{ window.print(); }}</script>
     </body></html>
     """
@@ -151,10 +157,12 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
 def generate_html_report(title, content_html, clinic_branch):
     logo_base64 = get_base64_image("logo.png")
     img_html = f'<img src="data:image/png;base64,{logo_base64}" style="height: 80px; margin-bottom: 10px;">' if logo_base64 else ''
+    bani_footer = get_bani_footer()
+    
     html_content = f"""<!DOCTYPE html><html><head><meta charset="UTF-8"><title>{title}</title>
-    <style>body {{ font-family: sans-serif; padding: 20px; text-align: center; }} table {{ width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: left; }} th, td {{ border: 1px solid #aaa; padding: 8px; }} th {{ background-color: #F8F1D1; color: #0F4C81; }} .bani-footer {{ text-align: center; font-size: 11px; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; color: #888; font-weight: bold; }}</style></head>
+    <style>body {{ font-family: sans-serif; padding: 20px; text-align: center; }} table {{ width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: left; }} th, td {{ border: 1px solid #aaa; padding: 8px; }} th {{ background-color: #F8F1D1; color: #0F4C81; }} .bani-footer {{ text-align: center; font-size: 11px; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; color: #888; font-weight: bold; display: flex; justify-content: center; align-items: center; }}</style></head>
     <body>{img_html}<h2>Makan {clinic_branch}</h2><h3>{title}</h3><div>{content_html}</div>
-    <div class="bani-footer">Designed by Bani Tech Solutions | banitech.in</div>
+    {bani_footer}
     <script>window.onload = function() {{ window.print(); }}</script></body></html>"""
     filename = f"Report_{title.replace(' ', '_')}.html"
     with open(filename, "w", encoding="utf-8") as f: f.write(html_content)
@@ -163,6 +171,8 @@ def generate_html_report(title, content_html, clinic_branch):
 def generate_html_report_landscape(title, content_html, clinic_branch):
     logo_base64 = get_base64_image("logo.png")
     img_html = f'<img src="data:image/png;base64,{logo_base64}" style="height: 80px; margin-bottom: 10px;">' if logo_base64 else ''
+    bani_footer = get_bani_footer()
+    
     html_content = f"""
     <!DOCTYPE html><html lang="pa"><head><meta charset="UTF-8"><title>{title}</title>
     <style>
@@ -176,7 +186,7 @@ def generate_html_report_landscape(title, content_html, clinic_branch):
         .report-table th, .report-table td {{ border: 1px solid #aaa; padding: 5px; color: #000; vertical-align: middle; text-align: center; }}
         .report-table th {{ background-color: #F8F1D1; color: #0F4C81; font-weight: bold; }}
         .table-img {{ width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #ccc; }}
-        .bani-footer {{ text-align: center; font-size: 11px; margin-top: 20px; color: #888; font-weight: bold; border-top: 1px solid #eee; padding-top: 8px; }}
+        .bani-footer {{ text-align: center; font-size: 11px; margin-top: 20px; color: #888; font-weight: bold; border-top: 1px solid #eee; padding-top: 8px; display: flex; justify-content: center; align-items: center; }}
         @media print {{ body {{ padding: 0; }} }}
     </style></head>
     <body>
@@ -188,7 +198,7 @@ def generate_html_report_landscape(title, content_html, clinic_branch):
             <div class="report-title">{title}</div>
         </div>
         <div style="overflow-x: auto;">{content_html}</div>
-        <div class="bani-footer">Designed by Bani Tech Solutions | banitech.in</div>
+        {bani_footer}
         <script>window.onload = function() {{ window.print(); }}</script>
     </body></html>
     """
@@ -228,7 +238,11 @@ if not st.session_state.logged_in:
                 else: st.error("ਗਲਤ ਪਾਸਵਰਡ! (Incorrect Password!)")
         
         # Adding Bani Tech Branding to the Login Page Footer
-        st.markdown("<br><div style='text-align: center; font-size: 12px; color: #888;'>Powered by <br><b>Bani Tech Solutions</b> | <a href='https://banitech.in' target='_blank' style='color: #0F4C81; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
+        st.markdown("<br><hr>", unsafe_allow_html=True)
+        if os.path.exists("bani_logo_2.jpeg"):
+            bc1, bc2, bc3 = st.columns([1, 2, 1])
+            with bc2: st.image("bani_logo_2.jpeg", use_container_width=True)
+        st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #0F4C81; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
     st.stop()
 
 # ==========================================
