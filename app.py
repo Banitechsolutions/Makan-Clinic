@@ -416,7 +416,7 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             else: st.error(f"❌ ਰਸੀਦ ਨਹੀਂ ਮਿਲੀ (Not found in {cb}).")
 
 # ==========================================
-# 2. DOCTOR PRESCRIPTION MODULE
+# 2. DOCTOR PRESCRIPTION MODULE (WITH DIRECT CAMERA)
 # ==========================================
 elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)":
     st.header(f"📝 {cb} - ਡਾਕਟਰ ਪਰਚੀ ਅਤੇ ਨੋਟਸ (Prescription & Findings)")
@@ -435,8 +435,15 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
                 
             p_findings = st.text_area("ਡਾਕਟਰ ਦੇ ਨੋਟਸ / ਬਿਮਾਰੀ (Doctor Findings / Chief Complaints)")
             
-            st.info("📸 ਤੁਸੀਂ ਮੋਬਾਈਲ 'ਤੇ 'Browse files' 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਸਿੱਧਾ ਕੈਮਰਾ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ (Use Camera on Mobile).")
-            p_photo = st.file_uploader("ਪਰਚੀ/X-Ray ਦੀ ਫੋਟੋ ਲਓ ਜਾਂ ਅੱਪਲੋਡ ਕਰੋ (Upload Physical Prescription/Scan)", type=['png', 'jpg', 'jpeg'])
+            # --- DIRECT CAMERA INPUT ADDED HERE ---
+            st.markdown("---")
+            st.write("📸 **ਪਰਚੀ ਜਾਂ X-Ray ਦੀ ਫੋਟੋ (Prescription / X-Ray Photo)**")
+            
+            p_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Open Camera & Capture)")
+            p_photo_file = st.file_uploader("ਜਾਂ ਪੁਰਾਣੀ ਫਾਈਲ ਅੱਪਲੋਡ ਕਰੋ (Or Upload from Device)", type=['png', 'jpg', 'jpeg'])
+            
+            # Use camera photo if taken, otherwise use the uploaded file
+            p_photo = p_photo_cam if p_photo_cam is not None else p_photo_file
             
             if st.form_submit_button("ਪਰਚੀ ਸੇਵ ਕਰੋ (Save Prescription)", type="primary") and p_name:
                 with st.spinner("ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ..."):
@@ -452,7 +459,7 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
                         }).execute()
                         st.success(f"✅ {p_name} ਦੀ ਪਰਚੀ {cb} ਰਿਕਾਰਡ ਵਿੱਚ ਸੇਵ ਹੋ ਗਈ!")
                     except Exception as e:
-                        st.error(f"❌ Database Error. Please run the updated SQL commands. Error: {e}")
+                        st.error(f"❌ Database Error. Error: {e}")
 
     with pt_tab2:
         st.write(f"### 📋 {cb} ਦੀਆਂ ਪੁਰਾਣੀਆਂ ਪਰਚੀਆਂ (Prescription History)")
@@ -464,7 +471,7 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
                 with st.expander(f"📅 {pr['prescription_date']} | {pr['patient_name']}"):
                     st.write(f"**Findings:** {pr.get('findings', 'N/A')}")
                     if pr.get('photo_base64'):
-                        st.image(base64.b64decode(pr['photo_base64']), caption="Uploaded Prescription / Scan", use_container_width=True)
+                        st.image(base64.b64decode(pr['photo_base64']), caption="Prescription / Scan", use_container_width=True)
                     else:
                         st.info("ਕੋਈ ਫੋਟੋ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤੀ ਗਈ। (No photo attached)")
         else:
@@ -561,7 +568,11 @@ elif st.session_state.current_tab == "🩺 ਮਰੀਜ਼ ਰਿਕਾਰਡ (P
                 stu_course = st.text_input("ਬਿਮਾਰੀ / ਇਲਾਜ (Diagnosis/Treatment)")
                 join_date = st.date_input("ਚੈੱਕਅਪ ਮਿਤੀ (Checkup Date)", value=date.today())
                 
-            s_photo = st.file_uploader("ਮਰੀਜ਼ ਦੀ ਫੋਟੋ (Upload Photo)", type=['png', 'jpg', 'jpeg'])
+            st.markdown("---")
+            st.write("📸 **ਮਰੀਜ਼ ਦੀ ਫੋਟੋ (Patient Photo)**")
+            s_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Camera)", key="patient_cam")
+            s_photo_file = st.file_uploader("ਜਾਂ ਗੈਲਰੀ 'ਚੋਂ ਫਾਈਲ ਚੁਣੋ (Gallery)", type=['png', 'jpg', 'jpeg'], key="patient_file")
+            s_photo = s_photo_cam if s_photo_cam is not None else s_photo_file
 
             if st.form_submit_button("ਰਿਕਾਰਡ ਸੇਵ ਕਰੋ", type="primary") and stu_name:
                 photo_str = compress_image(s_photo)
@@ -610,11 +621,16 @@ elif st.session_state.current_tab == "🦷 ਪ੍ਰੋਸੀਜਰ / ਸਰਜ�
                 w_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ: (Phone)*")
                 w_issued_by = st.text_input("ਡਾਕਟਰ (Attending Doctor)")
             with c_w3:
-                w_photo = st.file_uploader("X-Ray/ਸਕੈਨ (Upload Scan)", type=['png', 'jpg', 'jpeg'])
                 w_card_date = st.date_input("ਸ਼ੁਰੂਆਤ ਦੀ ਤਾਰੀਖ:", value=date.today())
             
             w_boys = st.text_area("ਐਲਰਜੀ (Allergies):")
             w_girls = st.text_area("ਪੁਰਾਣੀ ਮੈਡੀਕਲ ਹਿਸਟਰੀ (Medical History):")
+            
+            st.markdown("---")
+            st.write("📸 **X-Ray / ਸਕੈਨ ਅੱਪਲੋਡ ਕਰੋ (Upload Scan)**")
+            w_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Camera)", key="proc_cam")
+            w_photo_file = st.file_uploader("ਜਾਂ ਗੈਲਰੀ 'ਚੋਂ ਫਾਈਲ ਚੁਣੋ (Gallery)", type=['png', 'jpg', 'jpeg'], key="proc_file")
+            w_photo = w_photo_cam if w_photo_cam is not None else w_photo_file
             
             if st.form_submit_button("ਫਾਈਲ ਸੇਵ ਕਰੋ", type="primary") and w_name:
                 photo_str = compress_image(w_photo)
