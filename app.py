@@ -25,10 +25,12 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
-CLINIC_ADDRESS = "Dream City Market, Manawala, G.T. Road, Amritsar"
+CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
+CLINIC_ADDRESS = "Dreamcity SCO Market, Near Best Price, Manawala, Asr."
+
 BANK_ACCOUNTS = ["ਨਕਦ (Cash)", "Kotak Bank Regular", "Kotak Bank Corpus Fund", "Punjab & Sind Bank"]
 EXPENSE_CATEGORIES = [
     "--- ਕਲੀਨਿਕ ਖਰਚੇ (Clinic Expenses) ---",
@@ -37,16 +39,23 @@ EXPENSE_CATEGORIES = [
     "--- ਹੋਰ ਪ੍ਰਬੰਧ (Other Management) ---",
     "ਸਟਾਕ ਖਰੀਦ (Purchase of Stock)", "ਸਟਾਫ਼ ਦੀ ਤਨਖਾਹ (Payment to Staff)", "ਹੋਰ ਖਰਚੇ (Others)"
 ]
+
+# EXACT DENTAL TREATMENTS FROM LETTERHEAD
 DENTAL_TREATMENTS = [
-    "Root Canal Treatment (RCT)", "Tooth Extraction", "Teeth Scaling & Polishing", 
-    "Dental Fillings", "Braces / Orthodontics", "Crowns & Bridges", "Dental Implants", "Other"
+    "RCT", "Implants", "Dentures - Partial", "Dentures - Complete", "Fixed Teeth", 
+    "Tooth Coloured Fillings", "Extraction", "Scaling", "Smile Designing", "Braces", "Other Dental Procedures"
 ]
+# CHEST CLINIC SERVICES FROM LETTERHEAD
+CHEST_TREATMENTS = [
+    "Asthma Clinic", "Allergy Clinic", "Cough Clinic", "T B Clinic", 
+    "Patient Education Clinic", "Family Medicine", "Diabetes", "Hypertension", "Other Chest/Physician Consult"
+]
+
 STOCK_UNITS = ["ਕਿਲੋ (Kg)", "ਲੀਟਰ (Liter)", "ਪੀਸ (Pcs)", "ਗ੍ਰਾਮ (Gram)", "ਬੋਕਸ (Boxes)"]
 
 TIME_SLOTS = [
-    "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", 
-    "01:00 PM", "01:30 PM", "02:00 PM", "04:00 PM", "04:30 PM", "05:00 PM", 
-    "05:30 PM", "06:00 PM", "06:30 PM", "07:00 PM"
+    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", 
+    "01:00 PM", "05:00 PM", "05:30 PM", "06:00 PM", "06:30 PM"
 ]
 
 # ==========================================
@@ -58,13 +67,12 @@ st.markdown("""
         .stAppDeployButton {display:none !important;}
         [data-testid="stSidebar"] div[role="radiogroup"] label p { font-size: 18px !important; font-weight: 600 !important; padding-bottom: 5px; }
         h2 { font-size: 26px !important; font-weight: 700 !important; padding-bottom: 5px !important; }
-        .pro-header-flex { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #F8F1D1 0%, #ffffff 100%); padding: 15px 20px; border-radius: 12px; border: 2px solid #0F4C81; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .pro-title { font-size: 28px; font-weight: bold; color: #0F4C81 !important; margin: 0; letter-spacing: 0.5px; text-align: center;}
-        .pro-tagline { font-size: 17px; font-weight: bold; color: #D92B2B !important; margin: 4px 0; text-align: center;}
-        .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: center;}
+        .pro-header-flex { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); padding: 15px 20px; border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: center;}
+        .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: center; display: inline-block;}
         div.stButton > button { font-size: 18px !important; font-weight: bold !important; padding: 16px 10px !important; border-radius: 10px !important; width: 100% !important; }
-        .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #0F4C81 !important; background-color: #F8F1D1 !important; color: #0F4C81 !important; transition: 0.3s; }
-        .branch-btn > button:hover { background-color: #0F4C81 !important; color: white !important; }
+        .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #2E7D32 !important; background-color: #e8f5e9 !important; color: #2E7D32 !important; transition: 0.3s; }
+        .branch-btn > button:hover { background-color: #2E7D32 !important; color: white !important; }
         
         /* WhatsApp Button */
         .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
@@ -76,18 +84,12 @@ st.markdown("""
             50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; }
             100% { opacity: 1; background-color: #ffe6e6; }
         }
-        .flashing-alert {
-            animation: flashAnim 1.2s infinite;
-            padding: 12px;
-            background-color: #ffe6e6;
-            border: 2px solid red;
-            color: #cc0000;
-            font-weight: bold;
-            border-radius: 6px;
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
+        .flashing-alert { animation: flashAnim 1.2s infinite; padding: 12px; background-color: #ffe6e6; border: 2px solid red; color: #cc0000; font-weight: bold; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 16px; }
+        
+        /* Tables */
+        .report-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .report-table th, .report-table td { border: 1px solid #aaa; padding: 8px; }
+        .report-table th { background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -102,7 +104,7 @@ def compress_image(uploaded_file, max_size=(800, 800)):
             buffered = io.BytesIO()
             img.convert("RGB").save(buffered, format="JPEG", quality=75)
             return base64.b64encode(buffered.getvalue()).decode("utf-8")
-        except Exception as e: return ""
+        except Exception: return ""
     return ""
 
 def get_base64_image(image_path):
@@ -120,52 +122,87 @@ except Exception: st.error("Supabase Connection Error.")
 def get_bani_footer():
     bani_logo_base64 = get_base64_image("bani_logo_2.jpeg")
     bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
-    return f'<div class="bani-footer">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
+    return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
+
+def get_letterhead_header():
+    logo_base64 = get_base64_image("logo.png")
+    img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 80px;">' if logo_base64 else ''
+    
+    return f"""
+        <div style="display: flex; align-items: center; border-bottom: 2px solid #2E7D32; padding-bottom: 10px;">
+            <div style="flex: 1; text-align: left;">{img_html}</div>
+            <div style="flex: 4; text-align: center;">
+                <h1 style="color: #2E7D32; margin: 0; font-size: 24px; font-family: Arial, sans-serif;">{CLINIC_NAME}</h1>
+                <p style="background-color: #2E7D32; color: white; display: inline-block; padding: 4px 15px; font-size: 12px; margin: 8px 0 0 0; font-weight: bold; border-radius: 3px;">{CLINIC_ADDRESS}</p>
+            </div>
+            <div style="flex: 1;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; line-height: 1.4;">
+            <div style="text-align: left; color: #333;">
+                <strong style="font-size: 14px; color: #000;">Dr. Harpreet Singh Makan</strong><br>
+                MD, FICM,<br>Physician & Chest Consultant<br>Medical Superintendent<br>Mata Kaulan Ji Mission Hospital,<br>Mobile : 98150-45618
+            </div>
+            <div style="text-align: right; color: #333;">
+                <strong style="font-size: 14px; color: #000;">Dr. (Mrs.) Manmeet Makan</strong><br>
+                Dental Surgeon<br><br><br><br>Mobile : 98720-45618
+            </div>
+        </div>
+    """
+
+def get_letterhead_footer():
+    return f"""
+        <div style="border-top: 1px solid #000; padding-top: 10px; margin-top: 30px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; line-height: 1.4;">
+            <div style="text-align: left; color: #333;">
+                Chest Clinic Timing : 9:00 a.m. to 10:00 a.m.<br>
+                Dental Clinic Timing : 10:00 a.m. to 1:00 p.m.
+            </div>
+            <div style="text-align: left; color: #333;">
+                5:00 p.m. to 6:30 p.m.<br>
+                5:00 p.m. to 6:30 p.m.<br>
+                (Sunday Closed)
+            </div>
+            <div style="text-align: center; font-size: 12px; font-weight: bold; color: #000080;">
+                Take appointments on<br>
+                <span style="font-size: 16px;">79734-89915</span>
+            </div>
+        </div>
+        <div style="text-align: center; font-size: 10px; margin-top: 5px; font-weight: bold;">(NOT FOR MEDICO LEGAL PURPOSE)</div>
+    """
 
 def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mode, dept, bank_acc, on_account_of, collector=""):
     amount_text = f"Rs. {amount}/-"
     amount_in_words = f"Rupees {amount} Only" 
     display_phone = phone if phone else "________________"
-    logo_base64 = get_base64_image("logo.png")
-    img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 100px; position: absolute; left: 30px; top: 20px;">' if logo_base64 else ''
     
-    clinic_title = f"Makan {dept}"
+    header = get_letterhead_header()
+    footer = get_letterhead_footer()
     bani_footer = get_bani_footer()
     
     html_content = f"""
     <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Receipt #{receipt_no}</title>
         <style>
-            body {{ font-family: 'Segoe UI', sans-serif; background-color: #fff; padding: 20px; }}
-            .receipt-box {{ max-width: 800px; margin: auto; padding: 20px 30px; background-color: #F8F1D1; border-top: 20px solid #0F4C81; border-bottom: 20px solid #0F4C81; color: #333; position: relative;}}
-            .header-text {{ text-align: center; width: 100%; }}
-            .title-pa {{ font-size: 26px; font-weight: bold; color: #0F4C81; margin: 0; text-transform: uppercase; }}
-            .sub-title-pa {{ font-size: 16px; color: #D92B2B; font-weight: bold; margin: 4px 0; }}
-            .sub-title-en {{ font-size: 13px; font-weight: bold; color: #333; margin: 3px 0; }}
-            .reg-row {{ display: flex; justify-content: space-between; border-top: 1.5px solid #333; border-bottom: 1.5px solid #333; padding: 5px 0; font-size: 14px; font-weight: bold; margin: 15px 0; }}
-            .main-content {{ font-size: 15px; line-height: 2.0; font-weight: bold; color: #222; }}
-            .field-value {{ font-family: 'Courier New', monospace; font-size: 16px; color: #0F4C81; border-bottom: 1px solid #666; padding: 0 10px; }}
-            .amount-box {{ font-size: 18px; font-weight: bold; color: #0F4C81; border: 2px solid #333; padding: 5px 20px; border-radius: 15px; display: inline-block; }}
-            .bani-footer {{ text-align: center; font-size: 11px; margin-top: 30px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center; }}
+            body {{ font-family: 'Segoe UI', Arial, sans-serif; background-color: #fff; padding: 20px; margin: 0; }}
+            .receipt-box {{ max-width: 800px; margin: auto; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.05); }}
+            .reg-row {{ display: flex; justify-content: space-between; border-bottom: 1.5px solid #333; padding: 5px 0 15px 0; font-size: 15px; font-weight: bold; margin: 15px 0; color: #2E7D32; }}
+            .main-content {{ font-size: 15px; line-height: 2.2; color: #222; }}
+            .field-value {{ font-family: 'Courier New', monospace; font-size: 16px; color: #000; border-bottom: 1px dashed #666; padding: 0 10px; font-weight: bold; }}
+            .amount-box {{ font-size: 18px; font-weight: bold; color: #2E7D32; border: 2px solid #333; padding: 5px 20px; border-radius: 5px; display: inline-block; }}
         </style></head>
     <body>
         <div class="receipt-box">
-            {img_html}
-            <div class="header-text">
-                <p class="title-pa">{clinic_title}</p>
-                <p class="sub-title-pa">Complete Care</p>
-                <p class="sub-title-en">{CLINIC_ADDRESS}</p>
-            </div>
-            <div class="reg-row"><div>{dept.upper()} RECEIPT</div><div>Description: <span class="field-value" style="font-size:14px;">{on_account_of}</span></div></div>
+            {header}
+            <div class="reg-row"><div>{dept.upper()} RECEIPT</div><div>Description: <span class="field-value" style="font-size:14px; color:#000;">{on_account_of}</span></div></div>
             <div class="main-content">
                 <div style="display: flex; justify-content: space-between;"><div>Receipt No: <span class="field-value" style="color: #D92B2B;">{receipt_no:04d}</span></div><div>Date: <span class="field-value">{date_str[:10]}</span></div></div>
                 <div style="margin-top: 10px;">Received with thanks from Patient <span class="field-value" style="width: 40%; display:inline-block;">{name}</span>, Mob: <span class="field-value">{display_phone}</span></div>
                 <div style="margin-top: 10px;">A sum of <span class="field-value" style="width: 60%; display:inline-block;">{amount_in_words}</span>.</div>
-                <div style="margin-top: 10px;">Mode: <span class="field-value">{payment_mode}</span> Bank: <span class="field-value">{bank_acc}</span> Date: <span class="field-value">{date_str[:10]}</span></div>
+                <div style="margin-top: 10px;">Mode: <span class="field-value">{payment_mode}</span> Bank: <span class="field-value">{bank_acc}</span></div>
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 30px;">
                 <div class="amount-box">{amount_text}</div>
-                <div style="text-align: right; padding-top: 10px;">Authorized Signatory</div>
+                <div style="text-align: right; padding-top: 10px; font-weight: bold;">Authorized Signatory<br><br><br></div>
             </div>
+            {footer}
         </div>
         {bani_footer}
         <script>window.onload = function() {{ window.print(); }}</script>
@@ -176,31 +213,29 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
     return filename
 
 def generate_html_report_landscape(title, content_html, clinic_branch="Clinics"):
-    logo_base64 = get_base64_image("logo.png")
-    img_html = f'<img src="data:image/png;base64,{logo_base64}" style="height: 80px; margin-bottom: 10px;">' if logo_base64 else ''
+    header = get_letterhead_header()
+    footer = get_letterhead_footer()
     bani_footer = get_bani_footer()
     
     html_content = f"""
-    <!DOCTYPE html><html lang="pa"><head><meta charset="UTF-8"><title>{title}</title>
+    <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>{title}</title>
     <style>
         @page {{ size: landscape; margin: 10mm; }}
-        body {{ font-family: 'Segoe UI', sans-serif; padding: 10px; color: #333; text-align: center; }}
-        .header {{ margin-bottom: 15px; border-bottom: 2px solid #0F4C81; padding-bottom: 10px; }}
-        .title {{ font-size: 22px; font-weight: bold; color: #0F4C81; }}
-        .report-title {{ font-size: 16px; font-weight: bold; margin-top: 8px; }}
+        body {{ font-family: 'Segoe UI', sans-serif; padding: 10px; color: #333; }}
+        .report-title {{ font-size: 18px; font-weight: bold; margin: 15px 0; text-align: center; color: #2E7D32; text-decoration: underline; text-transform: uppercase;}}
         .report-table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; text-align: center; }}
         .report-table th, .report-table td {{ border: 1px solid #aaa; padding: 5px; }}
-        .report-table th {{ background-color: #F8F1D1; color: #0F4C81; font-weight: bold; }}
-        .bani-footer {{ text-align: center; font-size: 11px; margin-top: 20px; color: #888; font-weight: bold; border-top: 1px solid #eee; padding-top: 8px; display: flex; justify-content: center; align-items: center; }}
+        .report-table th {{ background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }}
+        @media print {{ body {{ padding: 0; }} }}
     </style></head>
     <body>
-        <div class="header">
-            {img_html}
-            <div class="title">Makan {clinic_branch}</div>
-            <div class="report-title">{title}</div>
+        <div style="max-width: 1050px; margin: auto;">
+            {header}
+            <div class="report-title">{title} - {clinic_branch.upper()}</div>
+            <div style="overflow-x: auto; min-height: 300px;">{content_html}</div>
+            {footer}
+            {bani_footer}
         </div>
-        <div style="overflow-x: auto;">{content_html}</div>
-        {bani_footer}
         <script>window.onload = function() {{ window.print(); }}</script>
     </body></html>
     """
@@ -226,7 +261,7 @@ if not st.session_state.logged_in:
     logo_login_path = "logo.png"
     if os.path.exists(logo_login_path): 
         st.markdown(f'<div style="text-align: center;"><img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 100px;"></div>', unsafe_allow_html=True)
-    st.markdown(f"<div style='text-align: center; margin-bottom: 20px;'><h2 style='color: #0F4C81;'>Makan Clinics</h2><p style='color: #E53935; font-weight: bold;'>Complete Care Portal</p></div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='text-align: center; margin-bottom: 20px;'><h2 style='color: #2E7D32;'>{CLINIC_NAME}</h2><p style='color: #fff; background-color: #2E7D32; display: inline-block; padding: 4px 15px; border-radius: 4px; font-weight: bold;'>Patient Appointment & Staff Portal</p></div>", unsafe_allow_html=True)
     
     tab_book, tab_login = st.tabs(["📅 Book Appointment (ਮਰੀਜ਼ਾਂ ਲਈ)", "🔐 Staff Login (ਸਟਾਫ ਲਾਗਇਨ)"])
     
@@ -251,11 +286,15 @@ if not st.session_state.logged_in:
                     if pub_name and pub_phone:
                         branch_clean = "Chest Clinic" if "Chest" in pub_branch else "Dental Clinic"
                         try:
-                            supabase.table("appointments").insert({
+                            res = supabase.table("appointments").insert({
                                 "patient_name": pub_name, "phone": pub_phone, "appointment_date": str(pub_date),
                                 "appointment_time": pub_time, "reason": pub_reason, "status": "Pending", "clinic_branch": branch_clean
                             }).execute()
-                            st.success(f"✅ ਬੇਨਤੀ ਸਫਲ ਰਹੀ! ਕਲੀਨਿਕ ਸਟਾਫ ਜਲਦੀ ਹੀ ਤੁਹਾਡਾ ਸਮਾਂ ਕਨਫਰਮ ਕਰੇਗਾ। (Request Sent for {branch_clean})")
+                            if res.data:
+                                booking_id = res.data[0]['id']
+                                st.success(f"✅ ਬੇਨਤੀ ਸਫਲ ਰਹੀ! ਤੁਹਾਡੀ Booking ID: #{booking_id} ਹੈ। ਕਲੀਨਿਕ ਸਟਾਫ ਜਲਦੀ ਹੀ ਤੁਹਾਡਾ ਸਮਾਂ ਕਨਫਰਮ ਕਰੇਗਾ।")
+                            else:
+                                st.success(f"✅ ਬੇਨਤੀ ਸਫਲ ਰਹੀ! ਕਲੀਨਿਕ ਸਟਾਫ ਜਲਦੀ ਹੀ ਤੁਹਾਡਾ ਸਮਾਂ ਕਨਫਰਮ ਕਰੇਗਾ।")
                         except Exception as e:
                             st.error(f"Database Error: Ensure 'appointments' SQL table is created. Error: {e}")
                     else:
@@ -279,26 +318,26 @@ if not st.session_state.logged_in:
     if os.path.exists("bani_logo_2.jpeg"):
         bc1, bc2, bc3 = st.columns([1, 2, 1])
         with bc2: st.image("bani_logo_2.jpeg", use_container_width=True)
-    st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #0F4C81; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
     st.stop()
 
 # ==========================================
 # CLINIC BRANCH SELECTION PORTAL
 # ==========================================
 if st.session_state.logged_in and st.session_state.clinic_branch is None:
-    st.markdown("<h2 style='text-align: center; color: #0F4C81; margin-top: 50px;'>🏥 Select Clinic Branch</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #2E7D32; margin-top: 50px;'>🏥 Select Clinic Branch</h2>", unsafe_allow_html=True)
     
     c1, c2, c3, c4 = st.columns([1, 2, 2, 1])
     with c2:
         st.markdown('<div class="branch-btn">', unsafe_allow_html=True)
-        if st.button("🫁 Makan Chest Clinic", use_container_width=True):
+        if st.button("🫁 Chest Clinic", use_container_width=True):
             st.session_state.clinic_branch = "Chest Clinic"
             st.session_state.current_tab = "🏠 ਹੋਮ ਪੇਜ (Home)"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     with c3:
         st.markdown('<div class="branch-btn">', unsafe_allow_html=True)
-        if st.button("🦷 Makan Dental Clinic", use_container_width=True):
+        if st.button("🦷 Dental Clinic", use_container_width=True):
             st.session_state.clinic_branch = "Dental Clinic"
             st.session_state.current_tab = "🏠 ਹੋਮ ਪੇਜ (Home)"
             st.rerun()
@@ -361,10 +400,10 @@ with st.sidebar:
     
     st.markdown("<br><br><hr>", unsafe_allow_html=True)
     if os.path.exists("bani_logo_2.jpeg"): st.image("bani_logo_2.jpeg", use_container_width=True)
-    st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #0F4C81; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
 # --- HEADER ---
-st.markdown(f"<div class='pro-header-flex'><div class='pro-text-box'><div class='pro-title'>🏥 Makan {cb}</div><div class='pro-sub'>{CLINIC_ADDRESS}</div></div></div>", unsafe_allow_html=True)
+st.markdown(f"<div class='pro-header-flex'><div class='pro-text-box'><div class='pro-title'>🏥 {CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
 
 # ==========================================
 # 0. HOME PAGE
@@ -428,9 +467,9 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ, ਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (ਨੰਬਰ: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ। ਧੰਨਵਾਦ! (Your appointment is confirmed)."
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_NAME}\n{CLINIC_ADDRESS}"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
-                                st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp ਭੇਜੋ (Send Confirmation)</a>', unsafe_allow_html=True)
+                                st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else:
                 st.info("ਕੋਈ ਪੈਂਡਿੰਗ ਬੇਨਤੀ ਨਹੀਂ ਹੈ।")
         else: st.info("ਕੋਈ ਡਾਟਾ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।")
@@ -466,9 +505,9 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ, ਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (ਨੰਬਰ: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ। ਧੰਨਵਾਦ! (Your appointment is confirmed)."
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_NAME}\n{CLINIC_ADDRESS}"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
-                        st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp ਭੇਜੋ (Send Confirmation)</a>', unsafe_allow_html=True)
+                        st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else:
                     st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
 
@@ -508,7 +547,12 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
-                treatment = st.text_input("ਵੇਰਵਾ (Consultation Type)")
+                
+                # Dynamic Dropdown based on Clinic Branch
+                if cb == "Chest Clinic":
+                    treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
+                else:
+                    treatment = st.text_input("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)")
                 
             col_m1, col_m2 = st.columns(2)
             with col_m1:
@@ -658,11 +702,11 @@ elif st.session_state.current_tab == "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ 
             <tr><th>Expenditure (ਖਰਚੇ)</th><th>Amount (₹)</th><th>Income (ਆਮਦਨ)</th><th>Amount (₹)</th></tr>
             <tr><td>Total Clinic Expenses</td><td>{total_expense:,.2f}</td><td>Total OPD & Treatment Fees</td><td>{total_income:,.2f}</td></tr>
             <tr style="font-weight:bold; color: #D92B2B;"><td>Surplus (ਬੱਚਤ)</td><td>{surplus if surplus > 0 else 0:,.2f}</td><td>Deficit (ਘਾਟਾ)</td><td>{abs(surplus) if surplus < 0 else 0:,.2f}</td></tr>
-            <tr style="background-color: #F8F1D1; font-weight:bold;"><td>Total</td><td>{max(total_income, total_expense):,.2f}</td><td>Total</td><td>{max(total_income, total_expense):,.2f}</td></tr>
+            <tr style="background-color: #e8f5e9; font-weight:bold;"><td>Total</td><td>{max(total_income, total_expense):,.2f}</td><td>Total</td><td>{max(total_income, total_expense):,.2f}</td></tr>
         </table>
         """
         st.markdown(inc_exp_html, unsafe_allow_html=True)
-        fin_report = generate_html_report(f"Financial Statements - {cb}", inc_exp_html, cb)
+        fin_report = generate_html_report_landscape(f"Financial Statements - {cb}", inc_exp_html, cb)
         with open(fin_report, "r", encoding="utf-8") as file: st.download_button("🖨️ ਰਿਪੋਰਟ ਪ੍ਰਿੰਟ ਕਰੋ", data=file.read(), file_name=fin_report, mime="text/html", type="primary")
 
     elif acc_mode == "📖 ਮੁੱਖ ਲੈਜ਼ਰ (Daybook)":
