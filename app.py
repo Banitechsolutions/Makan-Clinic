@@ -49,7 +49,7 @@ CHEST_TREATMENTS = [
     "Patient Education Clinic", "Family Medicine", "Diabetes", "Hypertension", "Other Chest/Physician Consult"
 ]
 
-STOCK_UNITS = ["ਕਿਲੋ (Kg)", "ਲੀਟਰ (Liter)", "ਪੀਸ (Pcs)", "ਗ੍ਰਾਮ (Gram)", "ਬੋਕਸ (Boxes)"]
+STOCK_UNITS = ["ਕਿਲੋ (Kg)", "ਲੀਟਰ (Liter)", "ਪੀਸ (Pcs)", "ਗ੍ਰਾਮ (Gram)", "ਬੋਕਸ (Boxes)", "ਪੈਕਟ (Packets)"]
 
 TIME_SLOTS = [
     "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", 
@@ -295,7 +295,6 @@ if not st.session_state.logged_in:
     clinic_logo_b64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
     logo_html = f'<img src="data:image/png;base64,{clinic_logo_b64}" style="width: 85px; margin-bottom: 8px;">' if clinic_logo_b64 else ''
     
-    # 1. Main Header Strip (Includes Clinic Logo cleanly)
     st.markdown(f"""
     <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         {logo_html}
@@ -312,7 +311,6 @@ if not st.session_state.logged_in:
     </div>
     """, unsafe_allow_html=True)
     
-    # 2. Main Layout Split (Left: Doctor Profiles, Right: Booking & Login)
     col_main, col_side = st.columns([1.5, 1], gap="large")
     
     with col_main:
@@ -343,7 +341,25 @@ if not st.session_state.logged_in:
             """, unsafe_allow_html=True)
         with card_col2:
             st.markdown("""
-            <div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);"><h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2><h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3><p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;"><b style="color:#000;">Dental Surgeon</b><br><br><br>📱 <b>98720-45618</b></p><div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;"><ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;"><li>RCT & Implants</li><li>Dentures (Partial & Complete)</li><li>Tooth Coloured Fillings & Extractions</li><li>Scaling, Braces & Smile Design</li></ul></div><div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM</div></div>
+            <div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2>
+                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3>
+                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
+                    <b style="color:#000;">Dental Surgeon</b><br><br><br>
+                    📱 <b>98720-45618</b>
+                </p>
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
+                        <li>RCT & Implants</li>
+                        <li>Dentures (Partial & Complete)</li>
+                        <li>Tooth Coloured Fillings & Extractions</li>
+                        <li>Scaling, Braces & Smile Design</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">
+                    🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
+                </div>
+            </div>
             """, unsafe_allow_html=True)
             
         st.markdown("<div style='text-align: center; color: #d32f2f; font-weight: bold; font-size: 14px; margin-top: 15px;'>⚠️ Note: Clinic is closed on Sundays.</div>", unsafe_allow_html=True)
@@ -351,7 +367,6 @@ if not st.session_state.logged_in:
     with col_side:
         st.markdown('<div id="book-online"></div>', unsafe_allow_html=True)
         
-        # Appointment Form
         st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
         with st.form("public_appointment_form", clear_on_submit=True):
             pub_branch = st.selectbox("Select Clinic", ["Chest Clinic", "Dental Clinic"])
@@ -376,7 +391,6 @@ if not st.session_state.logged_in:
                 else:
                     st.error("Name and Phone are required.")
 
-        # Staff Login Form
         st.markdown("<h3 style='margin: 15px 0 10px 0; color: #0F4C81; font-size: 20px;'>🔐 Staff Login</h3>", unsafe_allow_html=True)
         with st.form("login_form"):
             c_user, c_pass = st.columns(2)
@@ -390,11 +404,9 @@ if not st.session_state.logged_in:
                     st.rerun()
                 else: st.error("Incorrect Password!")
                 
-        # Bani Tech Logo and Branding
         st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
-        with col_b2:
-            display_bani_tech_logo()
+        with col_b2: display_bani_tech_logo()
         st.markdown("<div style='text-align: center; font-size: 11px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
     st.stop()
@@ -440,13 +452,11 @@ with st.sidebar:
     st.title("👤 ਪ੍ਰੋਫਾਈਲ (Profile)")
     st.success(f"✅ Logged in as: {st.session_state.role.upper()}")
     
-    # Clinic Logo next to branch
     clinic_logo_path = get_clinic_logo_path()
     clinic_logo_b64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
     sb_html = f'<img src="data:image/png;base64,{clinic_logo_b64}" style="width: 25px; vertical-align: middle; margin-right: 8px;">' if clinic_logo_b64 else ''
     st.markdown(f"<div style='background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #2E7D32; color: #2E7D32; font-weight: bold;'>{sb_html}Active: {cb}</div>", unsafe_allow_html=True)
     
-    # 🔴 FLASHING ALERT NOTIFICATION 🔴
     if pending_app_count > 0:
         st.markdown(f"""
             <div class="flashing-alert" style="margin-top: 15px;">
@@ -471,9 +481,8 @@ with st.sidebar:
         "📉 ਖਰਚੇ (Expenses)",
         "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ CA ਰਿਪੋਰਟਾਂ",
         "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)",
-        "📦 ਸਟਾਕ ਅਤੇ ਕਿਤਾਬਾਂ",
+        "📦 ਸਟਾਕ (Inventory)",
         "🩺 ਮਰੀਜ਼ ਰਿਕਾਰਡ (Patient Records)",
-        "🦷 ਪ੍ਰੋਸੀਜਰ / ਸਰਜਰੀ (Special Procedures)",
         "🧑‍💼 ਸਟਾਫ ਅਤੇ ਹਾਜ਼ਰੀ (Staff)"
     ]
     if is_admin: menu_options.append("⚙️ ਐਡਮਿਨ / ਡਿਲੀਟ / ਸੋਧ (Admin)")
@@ -483,7 +492,6 @@ with st.sidebar:
 
     st.session_state.current_tab = st.radio("ਚੁਣੋ (Select Menu)", menu_options, index=current_idx, label_visibility="collapsed")
     
-    # Bani Tech Logo in Sidebar
     st.markdown("<br><br><hr>", unsafe_allow_html=True)
     display_bani_tech_logo()
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
@@ -514,7 +522,7 @@ if st.session_state.current_tab == "🏠 ਹੋਮ ਪੇਜ (Home)":
         st.rerun()
 
 # ==========================================
-# 1. APPOINTMENTS MODULE (STAFF VIEW)
+# 1. APPOINTMENTS MODULE
 # ==========================================
 elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appointments)":
     st.header(f"📅 {cb} - ਅਪਾਇੰਟਮੈਂਟ ਡੈਸ਼ਬੋਰਡ")
@@ -541,34 +549,28 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                 
                 with st.form("confirm_appointment"):
                     col_u1, col_u2, col_u3 = st.columns(3)
-                    with col_u1:
-                        app_id = st.selectbox("ਅਪਾਇੰਟਮੈਂਟ ID (Select ID)", pending_app['id'].tolist())
-                    with col_u2:
-                        new_time = st.selectbox("ਸਮਾਂ ਪੱਕਾ ਕਰੋ (Allot Time)", TIME_SLOTS)
-                    with col_u3:
-                        new_status = st.selectbox("ਸਟੇਟਸ (Status)", ["Confirmed", "Cancelled"])
+                    with col_u1: app_id = st.selectbox("ਅਪਾਇੰਟਮੈਂਟ ID (Select ID)", pending_app['id'].tolist())
+                    with col_u2: new_time = st.selectbox("ਸਮਾਂ ਪੱਕਾ ਕਰੋ (Allot Time)", TIME_SLOTS)
+                    with col_u3: new_status = st.selectbox("ਸਟੇਟਸ (Status)", ["Confirmed", "Cancelled"])
                     
                     if st.form_submit_button("ਅਪਡੇਟ ਕਰੋ (Update Status)", type="primary"):
                         supabase.table("appointments").update({"status": new_status, "appointment_time": new_time}).eq("id", app_id).execute()
                         st.success(f"✅ ਅਪਾਇੰਟਮੈਂਟ #{app_id} '{new_status}' ਹੋ ਗਈ ਹੈ!")
-                        
                         if new_status == "Confirmed":
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
-            else:
-                st.info("ਕੋਈ ਪੈਂਡਿੰਗ ਬੇਨਤੀ ਨਹੀਂ ਹੈ।")
+            else: st.info("ਕੋਈ ਪੈਂਡਿੰਗ ਬੇਨਤੀ ਨਹੀਂ ਹੈ।")
         else: st.info("ਕੋਈ ਡਾਟਾ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।")
 
     with app_tab2:
         st.write("### ✅ ਕਨਫਰਮ ਅਤੇ ਪੂਰੀਆਂ (Confirmed & Completed)")
         if not df_app.empty:
             past_app = df_app[df_app['status'] != 'Pending']
-            if not past_app.empty:
-                st.dataframe(past_app[['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone', 'status']], hide_index=True, use_container_width=True)
+            if not past_app.empty: st.dataframe(past_app[['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone', 'status']], hide_index=True, use_container_width=True)
             else: st.info("ਕੋਈ ਕਨਫਰਮ ਰਿਕਾਰਡ ਨਹੀਂ ਹੈ।")
 
     with app_tab3:
@@ -587,16 +589,14 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     "patient_name": m_name, "phone": m_phone, "appointment_date": str(m_date),
                     "appointment_time": m_time, "status": "Confirmed", "clinic_branch": cb
                 }).execute()
-                
                 if res.data:
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
-                else:
-                    st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
+                else: st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
 
     with app_tab4:
         st.write("### 🖨️ ਰੋਜ਼ਾਨਾ ਅਪਾਇੰਟਮੈਂਟ ਸ਼ੀਟ ਪ੍ਰਿੰਟ ਕਰੋ")
@@ -612,31 +612,30 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                 else: st.warning("ਇਸ ਮਿਤੀ ਦੀ ਕੋਈ ਕਨਫਰਮ ਅਪਾਇੰਟਮੈਂਟ ਨਹੀਂ ਹੈ।")
 
 # ==========================================
-# 2. OPD ENTRY
+# 2. OPD ENTRY (DENTAL PROCEDURES MERGED)
 # ==========================================
 elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡੀ (OPD Entry)":
     st.header(f"📝 {cb} - ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
     
-    modes = ["💰 ਓ.ਪੀ.ਡੀ ਫੀਸ (OPD Fee)"]
-    if cb == "Dental Clinic": modes.append("🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Dental Treatment)")
-    modes.append("🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)")
-    
+    modes = ["💰 ਫੀਸ ਐਂਟਰੀ (OPD / Treatment Fee)", "🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)"]
     entry_mode = st.radio("ਐਕਸ਼ਨ ਚੁਣੋ:", modes, horizontal=True)
     st.markdown("---")
 
-    if entry_mode == "💰 ਓ.ਪੀ.ਡੀ ਫੀਸ (OPD Fee)":
+    if entry_mode == "💰 ਫੀਸ ਐਂਟਰੀ (OPD / Treatment Fee)":
         with st.form("opd_form", clear_on_submit=True):
-            st.write(f"### 🩺 {cb} - ਕੰਸਲਟੇਸ਼ਨ ਫੀਸ")
+            st.write(f"### 🩺 {cb} - ਕੰਸਲਟੇਸ਼ਨ ਅਤੇ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ")
             col_o1, col_o2 = st.columns(2)
             with col_o1:
                 patient_name = st.text_input("ਮਰੀਜ਼ ਦਾ ਨਾਮ (Patient Name)*")
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
+                
+                # Dynamic Dropdown based on Clinic Branch
                 if cb == "Chest Clinic":
-                    treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
+                    treatment = st.selectbox("ਵੇਰਵਾ (Consultation/Treatment)", CHEST_TREATMENTS)
                 else:
-                    treatment = st.text_input("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)")
+                    treatment = st.selectbox("ਵੇਰਵਾ (Consultation/Treatment)", ["General Consultation"] + DENTAL_TREATMENTS)
                 
             col_m1, col_m2 = st.columns(2)
             with col_m1:
@@ -652,7 +651,7 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             if supabase.table("donations").select("id").eq("id", int(rec_no)).eq("clinic_branch", cb).execute().data:
                 st.error(f"❌ ਰਸੀਦ ਨੰਬਰ {rec_no} ਪਹਿਲਾਂ ਹੀ {cb} ਵਿੱਚ ਮੌਜੂਦ ਹੈ!")
             else:
-                don_type = f"{cb} OPD Fee"
+                don_type = f"{cb} Fee"
                 supabase.table("donations").insert({
                     "id": int(rec_no), "name": patient_name, "phone": patient_phone, "amount": amount, 
                     "date": str(opd_date), "payment_mode": pay_mode, "donation_type": don_type, 
@@ -660,42 +659,6 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 }).execute()
                 st.success(f"✅ ਰਸੀਦ ਸੇਵ ਹੋ ਗਈ!")
                 html_file = generate_html_receipt(int(rec_no), patient_name, patient_phone, amount, str(opd_date), pay_mode, cb, bank_acc, treatment, "Reception")
-                with open(html_file, "r", encoding="utf-8") as file:
-                    st.download_button("🖨️ ਰਸੀਦ ਡਾਊਨਲੋਡ ਕਰੋ (Print Receipt)", data=file.read(), file_name=html_file, mime="text/html", type="primary")
-
-    elif entry_mode == "🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Dental Treatment)":
-        with st.form("dental_treatment_form", clear_on_submit=True):
-            st.write("### 🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ / ਸਰਜਰੀ ਫੀਸ")
-            col_t1, col_t2 = st.columns(2)
-            with col_t1:
-                patient_name = st.text_input("ਮਰੀਜ਼ ਦਾ ਨਾਮ (Patient Name)*", key="d_name")
-                patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone)", key="d_phone")
-            with col_t2:
-                rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1, key="d_rec")
-                treatment_type = st.selectbox("ਟ੍ਰੀਟਮੈਂਟ ਚੁਣੋ (Select Treatment)", DENTAL_TREATMENTS)
-                
-            col_m1, col_m2 = st.columns(2)
-            with col_m1:
-                amount = st.number_input("ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Treatment Amount ₹)*", min_value=1.0, key="d_amt")
-                pay_mode = st.selectbox("ਭੁਗਤਾਨ ਮੋਡ (Mode)", ["ਨਕਦ (Cash)", "UPI/Google Pay", "Card"], key="d_pay")
-            with col_m2:
-                bank_acc = st.selectbox("ਬੈਂਕ ਖਾਤਾ (Bank Account)", BANK_ACCOUNTS, key="d_bank")
-                t_date = st.date_input("ਮਿਤੀ (Date)", value=date.today(), key="d_date")
-                
-            submitted = st.form_submit_button("ਰਸੀਦ ਸੇਵ ਕਰੋ (Save Treatment)", type="primary")
-            
-        if submitted and patient_name:
-            if supabase.table("donations").select("id").eq("id", int(rec_no)).eq("clinic_branch", cb).execute().data:
-                st.error("❌ ਰਸੀਦ ਨੰਬਰ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ!")
-            else:
-                don_type = f"Dental Treatment Fee"
-                supabase.table("donations").insert({
-                    "id": int(rec_no), "name": patient_name, "phone": patient_phone, "amount": amount, 
-                    "date": str(t_date), "payment_mode": pay_mode, "donation_type": don_type, 
-                    "bank_account": bank_acc, "on_account_of": treatment_type, "add_to_mirror": True, "collector_name": "Doctor", "clinic_branch": cb
-                }).execute()
-                st.success("✅ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ ਸੇਵ ਹੋ ਗਈ!")
-                html_file = generate_html_receipt(int(rec_no), patient_name, patient_phone, amount, str(t_date), pay_mode, cb, bank_acc, f"Treatment: {treatment_type}", "Doctor")
                 with open(html_file, "r", encoding="utf-8") as file:
                     st.download_button("🖨️ ਰਸੀਦ ਡਾਊਨਲੋਡ ਕਰੋ (Print Receipt)", data=file.read(), file_name=html_file, mime="text/html", type="primary")
 
@@ -710,12 +673,12 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             else: st.error(f"❌ ਰਸੀਦ ਨਹੀਂ ਮਿਲੀ (Not found in {cb}).")
 
 # ==========================================
-# EXPENSES MODULE (DEDICATED)
+# EXPENSES MODULE
 # ==========================================
 elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
     st.header(f"📉 {cb} - ਕਲੀਨਿਕ ਖਰਚੇ (Clinic Expenses)")
     
-    with st.form("expense_form", clear_on_submit=True):
+    with st.form("expense_form_dedicated", clear_on_submit=True):
         st.write("### ➕ ਨਵਾਂ ਖਰਚਾ ਦਰਜ ਕਰੋ (Add Expense)")
         desc = st.text_input("ਖਰਚੇ ਦਾ ਵੇਰਵਾ (Expense Description)")
         cat = st.selectbox("ਕੈਟਾਗਰੀ (Category)", [c for c in EXPENSE_CATEGORIES if not c.startswith("---")])
@@ -739,8 +702,7 @@ elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
     if exp_data:
         df_exp = pd.DataFrame(exp_data)[['date', 'description', 'category', 'amount', 'bank_account']]
         st.dataframe(df_exp, hide_index=True, use_container_width=True)
-    else:
-        st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
+    else: st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
 
 # ==========================================
 # DOCTOR PRESCRIPTION MODULE
@@ -758,7 +720,6 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
             
             st.markdown("---")
             st.write("📸 **ਪਰਚੀ ਜਾਂ X-Ray ਦੀ ਫੋਟੋ (Prescription / X-Ray Photo)**")
-            
             use_camera = st.checkbox("📷 ਕੈਮਰਾ ਖੋਲ੍ਹੋ (Click to Open Camera)")
             p_photo = None
             
@@ -786,6 +747,91 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
                     st.write(f"**Findings:** {pr.get('findings', 'N/A')}")
                     if pr.get('photo_base64'): st.image(base64.b64decode(pr['photo_base64']), use_container_width=True)
         else: st.info(f"ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ ({cb}).")
+
+# ==========================================
+# INVENTORY / STOCK MODULE (NEW)
+# ==========================================
+elif st.session_state.current_tab == "📦 ਸਟਾਕ (Inventory)":
+    st.header(f"📦 {cb} - ਸਟਾਕ ਮੈਨੇਜਮੈਂਟ (Inventory)")
+    
+    st_tab1, st_tab2, st_tab3 = st.tabs(["➕ ਸਟਾਕ ਖਰੀਦੋ (Add Purchased Stock)", "📤 ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", "📊 ਸਟਾਕ ਰਿਪੋਰਟ (Current Stock)"])
+    
+    with st_tab1:
+        st.info("💡 **ਨੋਟ:** ਇੱਥੇ ਸਿਰਫ਼ ਖਰੀਦਿਆ ਗਿਆ ਸਟਾਕ (Purchased Stock) ਦਰਜ ਕਰੋ।")
+        with st.form("add_stock_form", clear_on_submit=True):
+            col_s1, col_s2 = st.columns(2)
+            with col_s1:
+                item_name = st.text_input("ਸਮਾਨ ਦਾ ਨਾਮ (Item Name)*")
+                qty = st.number_input("ਮਾਤਰਾ (Quantity)*", min_value=0.5, step=0.5)
+            with col_s2:
+                unit = st.selectbox("ਇਕਾਈ (Unit)", STOCK_UNITS)
+                pur_date = st.date_input("ਖਰੀਦਣ ਦੀ ਮਿਤੀ (Date)", value=date.today())
+            
+            if st.form_submit_button("ਸਟਾਕ ਵਿੱਚ ਜੋੜੋ (Add to Stock)", type="primary"):
+                if item_name:
+                    try:
+                        res = supabase.table("stock").select("*").eq("item_name", item_name).eq("clinic_branch", cb).execute()
+                        if res.data:
+                            new_qty = float(res.data[0]['quantity']) + float(qty)
+                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", item_name).eq("clinic_branch", cb).execute()
+                        else:
+                            supabase.table("stock").insert({"item_name": item_name, "quantity": float(qty), "unit": unit, "last_updated": str(datetime.now()), "clinic_branch": cb}).execute()
+                        
+                        supabase.table("stock_logs").insert({"action": "Purchased", "item_name": item_name, "quantity": float(qty), "date": str(pur_date), "clinic_branch": cb}).execute()
+                        st.success(f"✅ {qty} {unit} '{item_name}' ਸਟਾਕ ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ!")
+                        time.sleep(1); st.rerun()
+                    except Exception as e: st.error("Database Error: Ensure 'stock' and 'stock_logs' tables exist.")
+                else: st.error("ਸਮਾਨ ਦਾ ਨਾਮ ਭਰਨਾ ਜ਼ਰੂਰੀ ਹੈ।")
+
+    with st_tab2:
+        st.info("💡 **ਨੋਟ:** ਕਲੀਨਿਕ ਦੇ ਅੰਦਰ ਵਰਤੋਂ ਲਈ ਸਟਾਕ ਜਾਰੀ ਕਰੋ। (Issue for Clinic Use Only - No Public Distribution)")
+        try: current_stock = supabase.table("stock").select("*").eq("clinic_branch", cb).gt("quantity", 0).execute().data or []
+        except: current_stock = []
+        
+        if current_stock:
+            with st.form("issue_stock_form", clear_on_submit=True):
+                stock_dict = {item['item_name']: item['quantity'] for item in current_stock}
+                
+                col_is1, col_is2 = st.columns(2)
+                with col_is1:
+                    issue_item = st.selectbox("ਸਮਾਨ ਚੁਣੋ (Select Item)", list(stock_dict.keys()))
+                    issued_to = st.text_input("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ? (Issued To - Doctor/Room)*")
+                with col_is2:
+                    issue_qty = st.number_input(f"ਮਾਤਰਾ (Quantity to Issue)", min_value=0.5, step=0.5)
+                    st.write(f"*ਮੌਜੂਦ ਸਟਾਕ (Available): {stock_dict.get(issue_item, 0)}*")
+                
+                if st.form_submit_button("ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", type="primary"):
+                    if issued_to:
+                        if issue_qty <= stock_dict[issue_item]:
+                            new_qty = stock_dict[issue_item] - issue_qty
+                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", issue_item).eq("clinic_branch", cb).execute()
+                            supabase.table("stock_logs").insert({"action": f"Issued to {issued_to}", "item_name": issue_item, "quantity": float(issue_qty), "date": str(date.today()), "clinic_branch": cb}).execute()
+                            st.success(f"✅ {issue_qty} '{issue_item}' {issued_to} ਨੂੰ ਜਾਰੀ ਕੀਤਾ ਗਿਆ!")
+                            time.sleep(1); st.rerun()
+                        else: st.error("❌ ਇੰਨਾ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ! (Not enough stock)")
+                    else: st.error("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ ਹੈ, ਉਹ ਨਾਮ ਭਰੋ।")
+        else: st.warning("ਜਾਰੀ ਕਰਨ ਲਈ ਕੋਈ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ। (No stock available)")
+
+    with st_tab3:
+        st.write("### 📊 ਮੌਜੂਦਾ ਸਟਾਕ ਰਿਪੋਰਟ (Current Stock Report)")
+        try: stock_list = supabase.table("stock").select("*").eq("clinic_branch", cb).execute().data or []
+        except: stock_list = []
+        
+        if stock_list:
+            df_stock = pd.DataFrame(stock_list)[['item_name', 'quantity', 'unit', 'last_updated']]
+            df_stock.columns = ["Item Name", "Quantity", "Unit", "Last Updated"]
+            st.dataframe(df_stock, hide_index=True, use_container_width=True)
+        else: st.info("ਸਟਾਕ ਖਾਲੀ ਹੈ। (Stock is empty)")
+        
+        st.markdown("---")
+        st.write("### 📜 ਸਟਾਕ ਹਿਸਟਰੀ (Stock Logs)")
+        try: stock_logs = supabase.table("stock_logs").select("*").eq("clinic_branch", cb).order("id", desc=True).limit(50).execute().data or []
+        except: stock_logs = []
+        
+        if stock_logs:
+            df_logs = pd.DataFrame(stock_logs)[['date', 'action', 'item_name', 'quantity']]
+            df_logs.columns = ["Date", "Action", "Item Name", "Quantity"]
+            st.dataframe(df_logs, hide_index=True, use_container_width=True)
 
 # ==========================================
 # LEDGERS & CA REPORTS
@@ -847,6 +893,6 @@ elif st.session_state.current_tab == "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ 
 # ==========================================
 # CATCH-ALL FOR REMAINING TABS
 # ==========================================
-elif st.session_state.current_tab in ["🩺 ਮਰੀਜ਼ ਰਿਕਾਰਡ (Patient Records)", "🦷 ਪ੍ਰੋਸੀਜਰ / ਸਰਜਰੀ (Special Procedures)", "📦 ਸਟਾਕ ਅਤੇ ਕਿਤਾਬਾਂ", "🧑‍💼 ਸਟਾਫ ਅਤੇ ਹਾਜ਼ਰੀ (Staff)", "⚙️ ਐਡਮਿਨ / ਡਿਲੀਟ / ਸੋਧ (Admin)"]:
+elif st.session_state.current_tab in ["🩺 ਮਰੀਜ਼ ਰਿਕਾਰਡ (Patient Records)", "🧑‍💼 ਸਟਾਫ ਅਤੇ ਹਾਜ਼ਰੀ (Staff)", "⚙️ ਐਡਮਿਨ / ਡਿਲੀਟ / ਸੋਧ (Admin)"]:
     st.info(f"📍 Viewing {st.session_state.current_tab} for **{cb}**.")
     st.write("*(The underlying data mapping automatically secures this section for the active branch).*")
