@@ -25,7 +25,7 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
 CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
@@ -40,13 +40,10 @@ EXPENSE_CATEGORIES = [
     "ਸਟਾਕ ਖਰੀਦ (Purchase of Stock)", "ਸਟਾਫ਼ ਦੀ ਤਨਖਾਹ (Payment to Staff)", "ਹੋਰ ਖਰਚੇ (Others)"
 ]
 
-# EXACT DENTAL TREATMENTS FROM LETTERHEAD
 DENTAL_TREATMENTS = [
     "RCT", "Implants", "Dentures - Partial", "Dentures - Complete", "Fixed Teeth", 
     "Tooth Coloured Fillings", "Extraction", "Scaling", "Smile Designing", "Braces", "Other Dental Procedures"
 ]
-
-# CHEST CLINIC SERVICES FROM LETTERHEAD
 CHEST_TREATMENTS = [
     "Asthma Clinic", "Allergy Clinic", "Cough Clinic", "T B Clinic", 
     "Patient Education Clinic", "Family Medicine", "Diabetes", "Hypertension", "Other Chest/Physician Consult"
@@ -72,15 +69,13 @@ st.markdown("""
         .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: center;}
         .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: center; display: inline-block;}
         .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: center;}
-        div.stButton > button { font-size: 18px !important; font-weight: bold !important; padding: 16px 10px !important; border-radius: 10px !important; width: 100% !important; }
+        div.stButton > button { font-size: 18px !important; font-weight: bold !important; padding: 10px !important; border-radius: 8px !important; width: 100% !important; }
         .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #2E7D32 !important; background-color: #e8f5e9 !important; color: #2E7D32 !important; transition: 0.3s; }
         .branch-btn > button:hover { background-color: #2E7D32 !important; color: white !important; }
         
-        /* WhatsApp Button */
         .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
         .whatsapp-btn:hover { background-color: #128C7E; }
         
-        /* Flashing Alert Animation */
         @keyframes flashAnim {
             0% { opacity: 1; background-color: #ffe6e6; }
             50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; }
@@ -88,10 +83,12 @@ st.markdown("""
         }
         .flashing-alert { animation: flashAnim 1.2s infinite; padding: 12px; background-color: #ffe6e6; border: 2px solid red; color: #cc0000; font-weight: bold; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 16px; }
         
-        /* Tables */
         .report-table { width: 100%; border-collapse: collapse; text-align: left; }
         .report-table th, .report-table td { border: 1px solid #aaa; padding: 8px; }
         .report-table th { background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }
+        
+        /* Reduce form margins to make layout tighter */
+        div[data-testid="stForm"] { padding: 15px; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -122,7 +119,6 @@ try: supabase: Client = init_connection()
 except Exception: st.error("Supabase Connection Error.")
 
 def get_bani_footer():
-    # Calling exactly "Bani Tech" as requested
     bani_logo_base64 = get_base64_image("Bani Tech")
     bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
     return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
@@ -258,129 +254,129 @@ if 'current_tab' not in st.session_state:
     st.session_state.current_tab = "🏠 ਹੋਮ ਪੇਜ (Home)"
 
 # ==========================================
-# PUBLIC LANDING PAGE & LOGIN
+# PUBLIC LANDING PAGE & LOGIN (NEW CONCISE LAYOUT)
 # ==========================================
 if not st.session_state.logged_in:
-    # Safely formatted Landing Page HTML
-    landing_page_html = """
-    <div style="font-family: Arial, sans-serif; max-width: 1000px; margin: auto; padding: 20px; background-color: #ffffff;">
-        <div style="text-align: center; margin-bottom: 40px;">
-            <h1 style="color: #2E7D32; margin: 0; font-size: 40px; font-weight: 800; letter-spacing: 1px;">MAKAN CHEST & DENTAL CLINIC</h1>
-            <p style="color: #555; font-size: 18px; margin: 8px 0 20px 0; font-weight: 500;">Dreamcity SCO Market, Near Best Price, Manawala, Asr.</p>
-            <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 10px 25px; border-radius: 30px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(217, 43, 43, 0.3);">
-                📞 Appointments: 79734-89915
-            </div>
+    logo_login_path = "logo.png"
+    logo_html = f'<img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 90px; margin-bottom: 5px;">' if os.path.exists(logo_login_path) else ''
+    
+    # 1. Main Header Strip (Takes full width at the top)
+    st.markdown(f"""
+    <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        {logo_html}
+        <h1 style="color: #2E7D32; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
+        <p style="color: #555; font-size: 16px; margin: 5px 0 10px 0; font-weight: 500;">{CLINIC_ADDRESS}</p>
+        <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 6px 20px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">
+            📞 Appointments: 79734-89915
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 2. Main Layout Split (Left: Doctor Profiles, Right: Booking & Login)
+    col_main, col_side = st.columns([1.5, 1], gap="large")
+    
+    with col_main:
+        st.markdown("""
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
             <!-- Chest Clinic Card -->
-            <div style="flex: 1; min-width: 320px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 6px solid #2E7D32; transition: transform 0.3s;">
-                <h2 style="color: #2E7D32; margin: 0 0 15px 0; font-size: 24px; border-bottom: 2px dashed #eee; padding-bottom: 10px;">🫁 Chest Clinic</h2>
-                <h3 style="color: #333; margin: 0; font-size: 20px;">Dr. Harpreet Singh Makan</h3>
-                <p style="color: #666; font-size: 15px; line-height: 1.6; margin-top: 8px; min-height: 100px;">
+            <div style="flex: 1; min-width: 250px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #2E7D32;">
+                <h2 style="color: #2E7D32; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🫁 Chest Clinic</h2>
+                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. Harpreet Singh Makan</h3>
+                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
                     <b style="color:#000;">MD, FICM</b><br>
                     Physician & Chest Consultant<br>
-                    Medical Superintendent (Mata Kaulan Ji Mission Hospital)<br>
-                    📱 Mobile: <b>98150-45618</b>
+                    Medical Superintendent<br>
+                    📱 <b>98150-45618</b>
                 </p>
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0; color: #2E7D32; font-size: 16px;">Treatments & Services:</h4>
-                    <ul style="font-size: 15px; color: #555; margin: 0; padding-left: 20px; line-height: 1.6;">
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
                         <li>Asthma, Allergy & Cough Clinic</li>
                         <li>T.B. Clinic & Patient Education</li>
                         <li>Family Medicine & General Physician</li>
-                        <li>Diabetes & Hypertension Management</li>
+                        <li>Diabetes & Hypertension</li>
                     </ul>
                 </div>
-                <div style="margin-top: 20px; font-size: 14px; color: #2E7D32; text-align: center; background: #e8f5e9; padding: 10px; border-radius: 5px; font-weight: bold;">
-                    🕒 Timings: 9:00 AM - 10:00 AM | 5:00 PM - 6:30 PM
+                <div style="margin-top: 15px; font-size: 12px; color: #2E7D32; text-align: center; background: #e8f5e9; padding: 8px; border-radius: 5px; font-weight: bold;">
+                    🕒 9:00 AM - 10:00 AM | 5:00 PM - 6:30 PM
                 </div>
             </div>
+
             <!-- Dental Clinic Card -->
-            <div style="flex: 1; min-width: 320px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 6px solid #0F4C81; transition: transform 0.3s;">
-                <h2 style="color: #0F4C81; margin: 0 0 15px 0; font-size: 24px; border-bottom: 2px dashed #eee; padding-bottom: 10px;">🦷 Dental Clinic</h2>
-                <h3 style="color: #333; margin: 0; font-size: 20px;">Dr. (Mrs.) Manmeet Makan</h3>
-                <p style="color: #666; font-size: 15px; line-height: 1.6; margin-top: 8px; min-height: 100px;">
-                    <b style="color:#000;">Dental Surgeon</b><br><br><br><br>
-                    📱 Mobile: <b>98720-45618</b>
+            <div style="flex: 1; min-width: 250px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #0F4C81;">
+                <h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2>
+                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3>
+                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
+                    <b style="color:#000;">Dental Surgeon</b><br><br><br>
+                    📱 <b>98720-45618</b>
                 </p>
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0; color: #0F4C81; font-size: 16px;">Treatments & Services:</h4>
-                    <ul style="font-size: 15px; color: #555; margin: 0; padding-left: 20px; line-height: 1.6;">
-                        <li>Root Canal Treatment (RCT) & Implants</li>
-                        <li>Dentures (Partial & Complete) & Fixed Teeth</li>
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
+                        <li>RCT & Implants</li>
+                        <li>Dentures (Partial & Complete)</li>
                         <li>Tooth Coloured Fillings & Extractions</li>
-                        <li>Scaling, Braces & Smile Designing</li>
+                        <li>Scaling, Braces & Smile Design</li>
                     </ul>
                 </div>
-                <div style="margin-top: 20px; font-size: 14px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 10px; border-radius: 5px; font-weight: bold;">
-                    🕒 Timings: 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
+                <div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">
+                    🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
                 </div>
             </div>
         </div>
-        <div style="text-align: center; color: #d32f2f; font-weight: bold; font-size: 16px; margin-top: 30px; margin-bottom: 20px;">
+        <div style="text-align: center; color: #d32f2f; font-weight: bold; font-size: 14px; margin-top: 15px;">
             ⚠️ Note: Clinic is closed on Sundays.
         </div>
-    </div>
-    """
-    
-    st.markdown(landing_page_html, unsafe_allow_html=True)
-    
-    tab_book, tab_login = st.tabs(["📅 Book Appointment (ਮਰੀਜ਼ਾਂ ਲਈ)", "🔐 Staff Login (ਸਟਾਫ ਲਾਗਇਨ)"])
-    
-    with tab_book:
-        st.markdown("<h3 style='text-align: center;'>ਆਨਲਾਈਨ ਅਪਾਇੰਟਮੈਂਟ ਬੁੱਕ ਕਰੋ (Book Online)</h3>", unsafe_allow_html=True)
-        col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-        with col_b2:
-            with st.form("public_appointment_form", clear_on_submit=True):
-                pub_branch = st.selectbox("ਡਿਪਾਰਟਮੈਂਟ ਚੁਣੋ (Select Clinic)", ["Chest Clinic (ਛਾਤੀ ਦਾ ਰੋਗ)", "Dental Clinic (ਦੰਦਾਂ ਦਾ ਇਲਾਜ)"])
-                pub_name = st.text_input("ਮਰੀਜ਼ ਦਾ ਨਾਮ (Patient Name)*")
-                pub_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)*")
-                
-                col_fd1, col_fd2 = st.columns(2)
-                with col_fd1:
-                    pub_date = st.date_input("ਮਿਤੀ ਚੁਣੋ (Select Date)", min_value=date.today())
-                with col_fd2:
-                    pub_time = st.selectbox("ਤਰਜੀਹੀ ਸਮਾਂ (Preferred Time)", TIME_SLOTS)
-                    
-                pub_reason = st.text_area("ਬਿਮਾਰੀ ਦਾ ਵੇਰਵਾ (Reason for visit - Optional)")
-                
-                if st.form_submit_button("Book Appointment", type="primary"):
-                    if pub_name and pub_phone:
-                        branch_clean = "Chest Clinic" if "Chest" in pub_branch else "Dental Clinic"
-                        try:
-                            res = supabase.table("appointments").insert({
-                                "patient_name": pub_name, "phone": pub_phone, "appointment_date": str(pub_date),
-                                "appointment_time": pub_time, "reason": pub_reason, "status": "Pending", "clinic_branch": branch_clean
-                            }).execute()
-                            if res.data:
-                                booking_id = res.data[0]['id']
-                                st.success(f"✅ ਬੇਨਤੀ ਸਫਲ ਰਹੀ! ਤੁਹਾਡੀ Booking ID: #{booking_id} ਹੈ। ਕਲੀਨਿਕ ਸਟਾਫ ਜਲਦੀ ਹੀ ਤੁਹਾਡਾ ਸਮਾਂ ਕਨਫਰਮ ਕਰੇਗਾ।")
-                            else:
-                                st.success(f"✅ ਬੇਨਤੀ ਸਫਲ ਰਹੀ! ਕਲੀਨਿਕ ਸਟਾਫ ਜਲਦੀ ਹੀ ਤੁਹਾਡਾ ਸਮਾਂ ਕਨਫਰਮ ਕਰੇਗਾ।")
-                        except Exception as e:
-                            st.error(f"Database Error: Ensure 'appointments' SQL table is created. Error: {e}")
-                    else:
-                        st.error("ਕਿਰਪਾ ਕਰਕੇ ਨਾਮ ਅਤੇ ਫ਼ੋਨ ਨੰਬਰ ਜ਼ਰੂਰ ਭਰੋ।")
+        """, unsafe_allow_html=True)
 
-    with tab_login:
-        col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
-        with col_l2:
-            with st.form("login_form"):
-                username_input = st.text_input("ਯੂਜ਼ਰਨੇਮ (Username)").lower()
-                password_input = st.text_input("ਪਾਸਵਰਡ (Password)", type="password")
-                if st.form_submit_button("ਲਾਗਇਨ (Login)", type="primary"):
-                    if username_input in USERS and USERS[username_input]["password"] == password_input:
-                        st.session_state.logged_in = True
-                        st.session_state.role = USERS[username_input]["role"]
-                        st.session_state.username = username_input
-                        st.rerun()
-                    else: st.error("ਗਲਤ ਪਾਸਵਰਡ! (Incorrect Password!)")
-    
-    st.markdown("<br><hr>", unsafe_allow_html=True)
-    if os.path.exists("Bani Tech"):
-        bc1, bc2, bc3 = st.columns([1, 2, 1])
-        with bc2: st.image("Bani Tech", use_container_width=True)
-    st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
+    with col_side:
+        # Appointment Form
+        st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
+        with st.form("public_appointment_form", clear_on_submit=True):
+            pub_branch = st.selectbox("Select Clinic", ["Chest Clinic", "Dental Clinic"])
+            c_name, c_phone = st.columns(2)
+            pub_name = c_name.text_input("Name*")
+            pub_phone = c_phone.text_input("Phone*")
+            
+            c_date, c_time = st.columns(2)
+            pub_date = c_date.date_input("Date", min_value=date.today())
+            pub_time = c_time.selectbox("Time", TIME_SLOTS)
+            
+            if st.form_submit_button("Submit Request", type="primary", use_container_width=True):
+                if pub_name and pub_phone:
+                    try:
+                        res = supabase.table("appointments").insert({
+                            "patient_name": pub_name, "phone": pub_phone, "appointment_date": str(pub_date),
+                            "appointment_time": pub_time, "status": "Pending", "clinic_branch": pub_branch
+                        }).execute()
+                        if res.data:
+                            st.success(f"✅ ID: #{res.data[0]['id']}. Clinic will confirm shortly.")
+                        else:
+                            st.success(f"✅ Request Sent!")
+                    except Exception as e:
+                        st.error(f"Error: Ensure 'appointments' table exists.")
+                else:
+                    st.error("Name and Phone are required.")
+
+        # Staff Login Form
+        st.markdown("<h3 style='margin: 15px 0 10px 0; color: #0F4C81; font-size: 20px;'>🔐 Staff Login</h3>", unsafe_allow_html=True)
+        with st.form("login_form"):
+            c_user, c_pass = st.columns(2)
+            username_input = c_user.text_input("Username").lower()
+            password_input = c_pass.text_input("Password", type="password")
+            if st.form_submit_button("Login", type="primary", use_container_width=True):
+                if username_input in USERS and USERS[username_input]["password"] == password_input:
+                    st.session_state.logged_in = True
+                    st.session_state.role = USERS[username_input]["role"]
+                    st.session_state.username = username_input
+                    st.rerun()
+                else: st.error("Incorrect Password!")
+                
+        # Bani Tech Logo and Footer on right column
+        st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+        if os.path.exists("Bani Tech"):
+            col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
+            with col_b2: st.image("Bani Tech", use_container_width=True)
+        st.markdown("<div style='text-align: center; font-size: 11px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
+
     st.stop()
 
 # ==========================================
@@ -506,7 +502,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
         if not df_app.empty:
             pending_app = df_app[df_app['status'] == 'Pending']
             if not pending_app.empty:
-                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone', 'reason']
+                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone']
                 st.dataframe(pending_app[display_cols], hide_index=True, use_container_width=True)
                 
                 st.markdown("---")
@@ -529,7 +525,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else:
@@ -554,20 +550,18 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
             with col_mb2:
                 m_phone = st.text_input("ਫ਼ੋਨ (Phone)*")
                 m_time = st.selectbox("ਸਮਾਂ (Time)", TIME_SLOTS)
-                
-            m_reason = st.text_input("ਵੇਰਵਾ (Reason)")
             
             if st.form_submit_button("ਬੁੱਕ ਕਰੋ (Book Now)", type="primary") and m_name:
                 res = supabase.table("appointments").insert({
                     "patient_name": m_name, "phone": m_phone, "appointment_date": str(m_date),
-                    "appointment_time": m_time, "reason": m_reason, "status": "Confirmed", "clinic_branch": cb
+                    "appointment_time": m_time, "status": "Confirmed", "clinic_branch": cb
                 }).execute()
                 
                 if res.data:
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else:
@@ -580,7 +574,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
             if not df_app.empty:
                 sheet_df = df_app[(df_app['appointment_date'] == str(print_date)) & (df_app['status'] == 'Confirmed')]
                 if not sheet_df.empty:
-                    html_table = sheet_df[['appointment_time', 'patient_name', 'phone', 'reason']].to_html(index=False, border=1, classes='report-table')
+                    html_table = sheet_df[['appointment_time', 'patient_name', 'phone']].to_html(index=False, border=1, classes='report-table')
                     report_file = generate_html_report_landscape(f"Daily Appointment Sheet ({print_date})", html_table, cb)
                     with open(report_file, "r", encoding="utf-8") as file: 
                         st.download_button("🖨️ ਪ੍ਰਿੰਟ ਕਰੋ (Print PDF/Sheet)", data=file.read(), file_name=report_file, mime="text/html", type="primary")
@@ -608,6 +602,8 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
+                
+                # Dynamic Dropdown based on Clinic Branch from letterhead
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
                 else:
