@@ -25,7 +25,7 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
 CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
@@ -66,16 +66,23 @@ st.markdown("""
         [data-testid="stSidebar"] div[role="radiogroup"] label p { font-size: 18px !important; font-weight: 600 !important; padding-bottom: 5px; }
         h2 { font-size: 26px !important; font-weight: 700 !important; padding-bottom: 5px !important; }
         .pro-header-flex { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); padding: 15px 20px; border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: center;}
-        .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: center; display: inline-block;}
-        .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: center;}
+        .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: left;}
+        .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: left; display: inline-block;}
+        .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: left;}
         div.stButton > button { font-size: 18px !important; font-weight: bold !important; padding: 10px !important; border-radius: 8px !important; width: 100% !important; }
         .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #2E7D32 !important; background-color: #e8f5e9 !important; color: #2E7D32 !important; transition: 0.3s; }
         .branch-btn > button:hover { background-color: #2E7D32 !important; color: white !important; }
+        
         .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
         .whatsapp-btn:hover { background-color: #128C7E; }
-        @keyframes flashAnim { 0% { opacity: 1; background-color: #ffe6e6; } 50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; } 100% { opacity: 1; background-color: #ffe6e6; } }
+        
+        @keyframes flashAnim {
+            0% { opacity: 1; background-color: #ffe6e6; }
+            50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; }
+            100% { opacity: 1; background-color: #ffe6e6; }
+        }
         .flashing-alert { animation: flashAnim 1.2s infinite; padding: 12px; background-color: #ffe6e6; border: 2px solid red; color: #cc0000; font-weight: bold; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 16px; }
+        
         .report-table { width: 100%; border-collapse: collapse; text-align: left; }
         .report-table th, .report-table td { border: 1px solid #aaa; padding: 8px; }
         .report-table th { background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }
@@ -117,20 +124,87 @@ def get_bani_footer():
 def get_letterhead_header():
     logo_base64 = get_base64_image("logo.png")
     img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 80px;">' if logo_base64 else ''
-    return f"""<div style="display: flex; align-items: center; border-bottom: 2px solid #2E7D32; padding-bottom: 10px;"><div style="flex: 1; text-align: left;">{img_html}</div><div style="flex: 4; text-align: center;"><h1 style="color: #2E7D32; margin: 0; font-size: 24px; font-family: Arial, sans-serif;">{CLINIC_NAME}</h1><p style="background-color: #2E7D32; color: white; display: inline-block; padding: 4px 15px; font-size: 12px; margin: 8px 0 0 0; font-weight: bold; border-radius: 3px;">{CLINIC_ADDRESS}</p></div><div style="flex: 1;"></div></div><div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; line-height: 1.4;"><div style="text-align: left; color: #333;"><strong style="font-size: 14px; color: #000;">Dr. Harpreet Singh Makan</strong><br>MD, FICM,<br>Physician & Chest Consultant<br>Medical Superintendent<br>Mata Kaulan Ji Mission Hospital,<br>Mobile : 98150-45618</div><div style="text-align: right; color: #333;"><strong style="font-size: 14px; color: #000;">Dr. (Mrs.) Manmeet Makan</strong><br>Dental Surgeon<br><br><br><br>Mobile : 98720-45618</div></div>"""
+    
+    return f"""
+        <div style="display: flex; align-items: center; border-bottom: 2px solid #2E7D32; padding-bottom: 10px;">
+            <div style="flex: 1; text-align: left;">{img_html}</div>
+            <div style="flex: 4; text-align: center;">
+                <h1 style="color: #2E7D32; margin: 0; font-size: 24px; font-family: Arial, sans-serif;">{CLINIC_NAME}</h1>
+                <p style="background-color: #2E7D32; color: white; display: inline-block; padding: 4px 15px; font-size: 12px; margin: 8px 0 0 0; font-weight: bold; border-radius: 3px;">{CLINIC_ADDRESS}</p>
+            </div>
+            <div style="flex: 1;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; line-height: 1.4;">
+            <div style="text-align: left; color: #333;">
+                <strong style="font-size: 14px; color: #000;">Dr. Harpreet Singh Makan</strong><br>
+                MD, FICM,<br>Physician & Chest Consultant<br>Medical Superintendent<br>Mata Kaulan Ji Mission Hospital,<br>Mobile : 98150-45618
+            </div>
+            <div style="text-align: right; color: #333;">
+                <strong style="font-size: 14px; color: #000;">Dr. (Mrs.) Manmeet Makan</strong><br>
+                Dental Surgeon<br><br><br><br>Mobile : 98720-45618
+            </div>
+        </div>
+    """
 
 def get_letterhead_footer():
-    return f"""<div style="border-top: 1px solid #000; padding-top: 10px; margin-top: 30px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; line-height: 1.4;"><div style="text-align: left; color: #333;">Chest Clinic Timing : 9:00 a.m. to 10:00 a.m.<br>Dental Clinic Timing : 10:00 a.m. to 1:00 p.m.</div><div style="text-align: left; color: #333;">5:00 p.m. to 6:30 p.m.<br>5:00 p.m. to 6:30 p.m.<br>(Sunday Closed)</div><div style="text-align: center; font-size: 12px; font-weight: bold; color: #000080;">Take appointments on<br><span style="font-size: 16px;">79734-89915</span></div></div><div style="text-align: center; font-size: 10px; margin-top: 5px; font-weight: bold;">(NOT FOR MEDICO LEGAL PURPOSE)</div>"""
+    return f"""
+        <div style="border-top: 1px solid #000; padding-top: 10px; margin-top: 30px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; line-height: 1.4;">
+            <div style="text-align: left; color: #333;">
+                Chest Clinic Timing : 9:00 a.m. to 10:00 a.m.<br>
+                Dental Clinic Timing : 10:00 a.m. to 1:00 p.m.
+            </div>
+            <div style="text-align: left; color: #333;">
+                5:00 p.m. to 6:30 p.m.<br>
+                5:00 p.m. to 6:30 p.m.<br>
+                (Sunday Closed)
+            </div>
+            <div style="text-align: center; font-size: 12px; font-weight: bold; color: #000080;">
+                Take appointments on<br>
+                <span style="font-size: 16px;">79734-89915</span>
+            </div>
+        </div>
+        <div style="text-align: center; font-size: 10px; margin-top: 5px; font-weight: bold;">(NOT FOR MEDICO LEGAL PURPOSE)</div>
+    """
 
 def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mode, dept, bank_acc, on_account_of, collector=""):
     amount_text = f"Rs. {amount}/-"
     amount_in_words = f"Rupees {amount} Only" 
     display_phone = phone if phone else "________________"
+    
     header = get_letterhead_header()
     footer = get_letterhead_footer()
     bani_footer = get_bani_footer()
     
-    html_content = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Receipt #{receipt_no}</title><style>body {{ font-family: 'Segoe UI', Arial, sans-serif; background-color: #fff; padding: 20px; margin: 0; }} .receipt-box {{ max-width: 800px; margin: auto; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.05); }} .reg-row {{ display: flex; justify-content: space-between; border-bottom: 1.5px solid #333; padding: 5px 0 15px 0; font-size: 15px; font-weight: bold; margin: 15px 0; color: #2E7D32; }} .main-content {{ font-size: 15px; line-height: 2.2; color: #222; }} .field-value {{ font-family: 'Courier New', monospace; font-size: 16px; color: #000; border-bottom: 1px dashed #666; padding: 0 10px; font-weight: bold; }} .amount-box {{ font-size: 18px; font-weight: bold; color: #2E7D32; border: 2px solid #333; padding: 5px 20px; border-radius: 5px; display: inline-block; }}</style></head><body><div class="receipt-box">{header}<div class="reg-row"><div>{dept.upper()} RECEIPT</div><div>Description: <span class="field-value" style="font-size:14px; color:#000;">{on_account_of}</span></div></div><div class="main-content"><div style="display: flex; justify-content: space-between;"><div>Receipt No: <span class="field-value" style="color: #D92B2B;">{receipt_no:04d}</span></div><div>Date: <span class="field-value">{date_str[:10]}</span></div></div><div style="margin-top: 10px;">Received with thanks from Patient <span class="field-value" style="width: 40%; display:inline-block;">{name}</span>, Mob: <span class="field-value">{display_phone}</span></div><div style="margin-top: 10px;">A sum of <span class="field-value" style="width: 60%; display:inline-block;">{amount_in_words}</span>.</div><div style="margin-top: 10px;">Mode: <span class="field-value">{payment_mode}</span> Bank: <span class="field-value">{bank_acc}</span></div></div><div style="display: flex; justify-content: space-between; margin-top: 30px;"><div class="amount-box">{amount_text}</div><div style="text-align: right; padding-top: 10px; font-weight: bold;">Authorized Signatory<br><br><br></div></div>{footer}</div>{bani_footer}<script>window.onload = function() {{ window.print(); }}</script></body></html>"""
+    html_content = f"""
+    <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Receipt #{receipt_no}</title>
+        <style>
+            body {{ font-family: 'Segoe UI', Arial, sans-serif; background-color: #fff; padding: 20px; margin: 0; }}
+            .receipt-box {{ max-width: 800px; margin: auto; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.05); }}
+            .reg-row {{ display: flex; justify-content: space-between; border-bottom: 1.5px solid #333; padding: 5px 0 15px 0; font-size: 15px; font-weight: bold; margin: 15px 0; color: #2E7D32; }}
+            .main-content {{ font-size: 15px; line-height: 2.2; color: #222; }}
+            .field-value {{ font-family: 'Courier New', monospace; font-size: 16px; color: #000; border-bottom: 1px dashed #666; padding: 0 10px; font-weight: bold; }}
+            .amount-box {{ font-size: 18px; font-weight: bold; color: #2E7D32; border: 2px solid #333; padding: 5px 20px; border-radius: 5px; display: inline-block; }}
+        </style></head>
+    <body>
+        <div class="receipt-box">
+            {header}
+            <div class="reg-row"><div>{dept.upper()} RECEIPT</div><div>Description: <span class="field-value" style="font-size:14px; color:#000;">{on_account_of}</span></div></div>
+            <div class="main-content">
+                <div style="display: flex; justify-content: space-between;"><div>Receipt No: <span class="field-value" style="color: #D92B2B;">{receipt_no:04d}</span></div><div>Date: <span class="field-value">{date_str[:10]}</span></div></div>
+                <div style="margin-top: 10px;">Received with thanks from Patient <span class="field-value" style="width: 40%; display:inline-block;">{name}</span>, Mob: <span class="field-value">{display_phone}</span></div>
+                <div style="margin-top: 10px;">A sum of <span class="field-value" style="width: 60%; display:inline-block;">{amount_in_words}</span>.</div>
+                <div style="margin-top: 10px;">Mode: <span class="field-value">{payment_mode}</span> Bank: <span class="field-value">{bank_acc}</span></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                <div class="amount-box">{amount_text}</div>
+                <div style="text-align: right; padding-top: 10px; font-weight: bold;">Authorized Signatory<br><br><br></div>
+            </div>
+            {footer}
+        </div>
+        {bani_footer}
+        <script>window.onload = function() {{ window.print(); }}</script>
+    </body></html>
+    """
     filename = f"Receipt_{receipt_no}.html"
     with open(filename, "w", encoding="utf-8") as f: f.write(html_content)
     return filename
@@ -140,7 +214,28 @@ def generate_html_report_landscape(title, content_html, clinic_branch="Clinics")
     footer = get_letterhead_footer()
     bani_footer = get_bani_footer()
     
-    html_content = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>{title}</title><style>@page {{ size: landscape; margin: 10mm; }} body {{ font-family: 'Segoe UI', sans-serif; padding: 10px; color: #333; }} .report-title {{ font-size: 18px; font-weight: bold; margin: 15px 0; text-align: center; color: #2E7D32; text-decoration: underline; text-transform: uppercase;}} .report-table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; text-align: center; }} .report-table th, .report-table td {{ border: 1px solid #aaa; padding: 5px; }} .report-table th {{ background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }} @media print {{ body {{ padding: 0; }} }}</style></head><body><div style="max-width: 1050px; margin: auto;">{header}<div class="report-title">{title} - {clinic_branch.upper()}</div><div style="overflow-x: auto; min-height: 300px;">{content_html}</div>{footer}{bani_footer}</div><script>window.onload = function() {{ window.print(); }}</script></body></html>"""
+    html_content = f"""
+    <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>{title}</title>
+    <style>
+        @page {{ size: landscape; margin: 10mm; }}
+        body {{ font-family: 'Segoe UI', sans-serif; padding: 10px; color: #333; }}
+        .report-title {{ font-size: 18px; font-weight: bold; margin: 15px 0; text-align: center; color: #2E7D32; text-decoration: underline; text-transform: uppercase;}}
+        .report-table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; text-align: center; }}
+        .report-table th, .report-table td {{ border: 1px solid #aaa; padding: 5px; }}
+        .report-table th {{ background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }}
+        @media print {{ body {{ padding: 0; }} }}
+    </style></head>
+    <body>
+        <div style="max-width: 1050px; margin: auto;">
+            {header}
+            <div class="report-title">{title} - {clinic_branch.upper()}</div>
+            <div style="overflow-x: auto; min-height: 300px;">{content_html}</div>
+            {footer}
+            {bani_footer}
+        </div>
+        <script>window.onload = function() {{ window.print(); }}</script>
+    </body></html>
+    """
     filename = f"Report_Landscape_{title.replace(' ', '_')}.html"
     with open(filename, "w", encoding="utf-8") as f: f.write(html_content)
     return filename
@@ -163,21 +258,74 @@ if not st.session_state.logged_in:
     logo_login_path = "logo.png"
     logo_html = f'<img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 90px; margin-bottom: 5px;">' if os.path.exists(logo_login_path) else ''
     
-    # Header Section
-    st.markdown(f"""<div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">{logo_html}<h1 style="color: #2E7D32; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1><p style="color: #555; font-size: 16px; margin: 5px 0 10px 0; font-weight: 500;">{CLINIC_ADDRESS}</p><div style="display: inline-block; background-color: #D92B2B; color: white; padding: 6px 20px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">📞 Appointments: 79734-89915</div></div>""", unsafe_allow_html=True)
+    # 1. Main Header Strip
+    st.markdown(f"""
+    <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        {logo_html}
+        <h1 style="color: #2E7D32; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
+        <p style="color: #555; font-size: 16px; margin: 5px 0 10px 0; font-weight: 500;">{CLINIC_ADDRESS}</p>
+        <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 6px 20px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">
+            📞 Appointments: 79734-89915
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # PC Layout: Left for Doctors, Right for Forms
+    # 2. Main Layout Split (Left: Doctor Profiles, Right: Booking & Login)
     col_main, col_side = st.columns([1.5, 1], gap="large")
     
     with col_main:
         card_col1, card_col2 = st.columns(2)
         with card_col1:
-            st.markdown("""<div style="border-top: 5px solid #2E7D32; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);"><h2 style="color: #2E7D32; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🫁 Chest Clinic</h2><h3 style="color: #333; margin: 0; font-size: 17px;">Dr. Harpreet Singh Makan</h3><p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;"><b style="color:#000;">MD, FICM</b><br>Physician & Chest Consultant<br>Medical Superintendent<br>📱 <b>98150-45618</b></p><div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;"><ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;"><li>Asthma, Allergy & Cough Clinic</li><li>T.B. Clinic & Patient Education</li><li>Family Medicine & Gen. Physician</li><li>Diabetes & Hypertension</li></ul></div><div style="margin-top: 15px; font-size: 12px; color: #2E7D32; text-align: center; background: #e8f5e9; padding: 8px; border-radius: 5px; font-weight: bold;">🕒 9:00 AM - 10:00 AM | 5:00 PM - 6:30 PM</div></div>""", unsafe_allow_html=True)
+            st.markdown("""
+            <div style="border-top: 5px solid #2E7D32; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h2 style="color: #2E7D32; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🫁 Chest Clinic</h2>
+                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. Harpreet Singh Makan</h3>
+                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
+                    <b style="color:#000;">MD, FICM</b><br>
+                    Physician & Chest Consultant<br>
+                    Medical Superintendent<br>
+                    📱 <b>98150-45618</b>
+                </p>
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
+                        <li>Asthma, Allergy & Cough Clinic</li>
+                        <li>T.B. Clinic & Patient Education</li>
+                        <li>Family Medicine & Gen. Physician</li>
+                        <li>Diabetes & Hypertension</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 15px; font-size: 12px; color: #2E7D32; text-align: center; background: #e8f5e9; padding: 8px; border-radius: 5px; font-weight: bold;">
+                    🕒 9:00 AM - 10:00 AM | 5:00 PM - 6:30 PM
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         with card_col2:
-            st.markdown("""<div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);"><h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2><h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3><p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;"><b style="color:#000;">Dental Surgeon</b><br><br><br>📱 <b>98720-45618</b></p><div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;"><ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;"><li>RCT & Implants</li><li>Dentures (Partial & Complete)</li><li>Tooth Coloured Fillings & Extractions</li><li>Scaling, Braces & Smile Design</li></ul></div><div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM</div></div>""", unsafe_allow_html=True)
+            st.markdown("""
+            <div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2>
+                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3>
+                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
+                    <b style="color:#000;">Dental Surgeon</b><br><br><br>
+                    📱 <b>98720-45618</b>
+                </p>
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
+                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
+                        <li>RCT & Implants</li>
+                        <li>Dentures (Partial & Complete)</li>
+                        <li>Tooth Coloured Fillings & Extractions</li>
+                        <li>Scaling, Braces & Smile Design</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">
+                    🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
         st.markdown("<div style='text-align: center; color: #d32f2f; font-weight: bold; font-size: 14px; margin-top: 15px;'>⚠️ Note: Clinic is closed on Sundays.</div>", unsafe_allow_html=True)
 
     with col_side:
+        # Appointment Form
         st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
         with st.form("public_appointment_form", clear_on_submit=True):
             pub_branch = st.selectbox("Select Clinic", ["Chest Clinic", "Dental Clinic"])
@@ -202,6 +350,7 @@ if not st.session_state.logged_in:
                 else:
                     st.error("Name and Phone are required.")
 
+        # Staff Login Form
         st.markdown("<h3 style='margin: 15px 0 10px 0; color: #0F4C81; font-size: 20px;'>🔐 Staff Login</h3>", unsafe_allow_html=True)
         with st.form("login_form"):
             c_user, c_pass = st.columns(2)
@@ -215,10 +364,11 @@ if not st.session_state.logged_in:
                     st.rerun()
                 else: st.error("Incorrect Password!")
                 
+        # Bani Tech Logo and Footer on right column
         st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         if os.path.exists("Bani Tech"):
-            bc1, bc2, bc3 = st.columns([1, 1.5, 1])
-            with bc2: st.image("Bani Tech", use_container_width=True)
+            col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
+            with col_b2: st.image("Bani Tech", use_container_width=True)
         st.markdown("<div style='text-align: center; font-size: 11px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
     st.stop()
@@ -263,15 +413,21 @@ except Exception: pass
 with st.sidebar:
     st.title("👤 ਪ੍ਰੋਫਾਈਲ (Profile)")
     st.success(f"✅ Logged in as: {st.session_state.role.upper()}")
-    st.info(f"📍 Active: {cb}")
     
+    # Logo next to Clinic Name
+    sb_logo = get_base64_image("logo.png")
+    sb_html = f'<img src="data:image/png;base64,{sb_logo}" style="width: 30px; vertical-align: middle; margin-right: 8px;">' if sb_logo else ''
+    st.markdown(f"<div style='background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #2E7D32; color: #2E7D32; font-weight: bold;'>{sb_html}Active: {cb}</div>", unsafe_allow_html=True)
+    
+    # 🔴 FLASHING ALERT NOTIFICATION 🔴
     if pending_app_count > 0:
         st.markdown(f"""
-            <div class="flashing-alert">
+            <div class="flashing-alert" style="margin-top: 15px;">
                 🚨 ਧਿਆਨ ਦਿਓ! <br><b>{pending_app_count}</b> ਨਵੀਆਂ ਅਪਾਇੰਟਮੈਂਟ ਬੇਨਤੀਆਂ ਆਈਆਂ ਹਨ!
             </div>
         """, unsafe_allow_html=True)
     
+    st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🔄 Switch Clinic Branch"):
         st.session_state.clinic_branch = None
         st.rerun()
@@ -285,6 +441,7 @@ with st.sidebar:
         "🏠 ਹੋਮ ਪੇਜ (Home)",
         "📅 ਅਪਾਇੰਟਮੈਂਟ (Appointments)",
         "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡੀ (OPD Entry)", 
+        "📉 ਖਰਚੇ (Expenses)",
         "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ CA ਰਿਪੋਰਟਾਂ",
         "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)",
         "📦 ਸਟਾਕ ਅਤੇ ਕਿਤਾਬਾਂ",
@@ -304,7 +461,9 @@ with st.sidebar:
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
 # --- HEADER ---
-st.markdown(f"<div class='pro-header-flex'><div class='pro-text-box'><div class='pro-title'>🏥 {CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
+hdr_logo = get_base64_image("logo.png")
+hdr_logo_html = f'<img src="data:image/png;base64,{hdr_logo}" style="width: 70px; margin-right: 15px;">' if hdr_logo else ''
+st.markdown(f"<div class='pro-header-flex'>{hdr_logo_html}<div class='pro-text-box'><div class='pro-title'>🏥 {CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
 
 # ==========================================
 # 0. HOME PAGE
@@ -321,8 +480,8 @@ if st.session_state.current_tab == "🏠 ਹੋਮ ਪੇਜ (Home)":
     if c3.button("📝 ਡਾਕਟਰ ਪਰਚੀ (Prescription)", use_container_width=True, type="primary"):
         st.session_state.current_tab = "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)"
         st.rerun()
-    if c4.button("📊 ਬੈਲੇਂਸ ਸ਼ੀਟ (P&L)", use_container_width=True, type="primary"):
-        st.session_state.current_tab = "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ CA ਰਿਪੋਰਟਾਂ"
+    if c4.button("📉 ਕਲੀਨਿਕ ਖਰਚਾ (Expenses)", use_container_width=True, type="primary"):
+        st.session_state.current_tab = "📉 ਖਰਚੇ (Expenses)"
         st.rerun()
 
 # ==========================================
@@ -345,7 +504,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
         if not df_app.empty:
             pending_app = df_app[df_app['status'] == 'Pending']
             if not pending_app.empty:
-                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone', 'reason']
+                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone']
                 st.dataframe(pending_app[display_cols], hide_index=True, use_container_width=True)
                 
                 st.markdown("---")
@@ -368,7 +527,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else:
@@ -404,7 +563,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else:
@@ -424,14 +583,14 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                 else: st.warning("ਇਸ ਮਿਤੀ ਦੀ ਕੋਈ ਕਨਫਰਮ ਅਪਾਇੰਟਮੈਂਟ ਨਹੀਂ ਹੈ।")
 
 # ==========================================
-# 2. OPD, EXPENSE & DENTAL TREATMENTS ENTRY
+# 2. OPD ENTRY
 # ==========================================
 elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡੀ (OPD Entry)":
-    st.header(f"📝 {cb} - ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
+    st.header(f"📝 {cb} - OPD ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
     
     modes = ["💰 ਓ.ਪੀ.ਡੀ ਫੀਸ (OPD Fee)"]
     if cb == "Dental Clinic": modes.append("🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Dental Treatment)")
-    modes.extend(["📉 ਖਰਚਾ ਦਰਜ ਕਰੋ (Expense)", "🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)"])
+    modes.append("🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)")
     
     entry_mode = st.radio("ਐਕਸ਼ਨ ਚੁਣੋ:", modes, horizontal=True)
     st.markdown("---")
@@ -445,8 +604,6 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
-                
-                # Dynamic Dropdown based on Clinic Branch from letterhead
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
                 else:
@@ -513,21 +670,6 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 with open(html_file, "r", encoding="utf-8") as file:
                     st.download_button("🖨️ ਰਸੀਦ ਡਾਊਨਲੋਡ ਕਰੋ (Print Receipt)", data=file.read(), file_name=html_file, mime="text/html", type="primary")
 
-    elif entry_mode == "📉 ਖਰਚਾ ਦਰਜ ਕਰੋ (Expense)":
-        with st.form("expense_form", clear_on_submit=True):
-            st.write(f"### 📉 {cb} ਦਾ ਖਰਚਾ ਦਰਜ ਕਰੋ")
-            desc = st.text_input("ਖਰਚੇ ਦਾ ਵੇਰਵਾ (Expense Description)")
-            cat = st.selectbox("ਕੈਟਾਗਰੀ (Category)", [c for c in EXPENSE_CATEGORIES if not c.startswith("---")])
-            exp_amount = st.number_input("ਰਕਮ (Amount ₹)", min_value=1.0)
-            bank_acc_exp = st.selectbox("ਬੈਂਕ ਖਾਤਾ (Bank Account)", BANK_ACCOUNTS)
-            exp_date = st.date_input("ਮਿਤੀ (Date)", value=date.today())
-            if st.form_submit_button("ਖਰਚਾ ਸੇਵ ਕਰੋ", type="primary") and desc:
-                supabase.table("expenses").insert({
-                    "description": desc, "amount": exp_amount, "date": str(exp_date), 
-                    "category": cat, "bank_account": bank_acc_exp, "add_to_mirror": True, "clinic_branch": cb
-                }).execute()
-                st.success("✅ ਖਰਚਾ ਸੇਵ ਹੋ ਗਿਆ!")
-
     elif entry_mode == "🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)":
         search_id = st.number_input("ਰਸੀਦ ਨੰਬਰ (Enter Receipt No.)", min_value=1, step=1)
         if st.button("🔍 ਰਸੀਦ ਲੱਭੋ (Search)", type="primary"):
@@ -539,7 +681,40 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             else: st.error(f"❌ ਰਸੀਦ ਨਹੀਂ ਮਿਲੀ (Not found in {cb}).")
 
 # ==========================================
-# 3. DOCTOR PRESCRIPTION MODULE (CAMERA)
+# EXPENSES MODULE (DEDICATED)
+# ==========================================
+elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
+    st.header(f"📉 {cb} - ਕਲੀਨਿਕ ਖਰਚੇ (Clinic Expenses)")
+    
+    with st.form("expense_form", clear_on_submit=True):
+        st.write("### ➕ ਨਵਾਂ ਖਰਚਾ ਦਰਜ ਕਰੋ (Add Expense)")
+        desc = st.text_input("ਖਰਚੇ ਦਾ ਵੇਰਵਾ (Expense Description)")
+        cat = st.selectbox("ਕੈਟਾਗਰੀ (Category)", [c for c in EXPENSE_CATEGORIES if not c.startswith("---")])
+        exp_amount = st.number_input("ਰਕਮ (Amount ₹)", min_value=1.0)
+        bank_acc_exp = st.selectbox("ਬੈਂਕ ਖਾਤਾ (Bank Account)", BANK_ACCOUNTS)
+        exp_date = st.date_input("ਮਿਤੀ (Date)", value=date.today())
+        
+        if st.form_submit_button("ਖਰਚਾ ਸੇਵ ਕਰੋ (Save Expense)", type="primary") and desc:
+            supabase.table("expenses").insert({
+                "description": desc, "amount": exp_amount, "date": str(exp_date), 
+                "category": cat, "bank_account": bank_acc_exp, "add_to_mirror": True, "clinic_branch": cb
+            }).execute()
+            st.success("✅ ਖਰਚਾ ਸੇਵ ਹੋ ਗਿਆ!")
+            time.sleep(1); st.rerun()
+            
+    st.markdown("---")
+    st.write(f"### 📋 ਪਿਛਲੇ ਖਰਚੇ (Recent Expenses in {cb})")
+    try: exp_data = supabase.table("expenses").select("*").eq("clinic_branch", cb).order("date", desc=True).limit(50).execute().data or []
+    except Exception: exp_data = []
+    
+    if exp_data:
+        df_exp = pd.DataFrame(exp_data)[['date', 'description', 'category', 'amount', 'bank_account']]
+        st.dataframe(df_exp, hide_index=True, use_container_width=True)
+    else:
+        st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
+
+# ==========================================
+# DOCTOR PRESCRIPTION MODULE (CAMERA FIX)
 # ==========================================
 elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)":
     st.header(f"📝 {cb} - ਡਾਕਟਰ ਪਰਚੀ ਅਤੇ ਨੋਟਸ (Prescription & Findings)")
@@ -554,9 +729,17 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
             
             st.markdown("---")
             st.write("📸 **ਪਰਚੀ ਜਾਂ X-Ray ਦੀ ਫੋਟੋ (Prescription / X-Ray Photo)**")
-            p_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Open Camera)")
-            p_photo_file = st.file_uploader("ਜਾਂ ਪੁਰਾਣੀ ਫਾਈਲ ਅੱਪਲੋਡ ਕਰੋ (Or Upload from Device)", type=['png', 'jpg', 'jpeg'])
-            p_photo = p_photo_cam if p_photo_cam is not None else p_photo_file
+            
+            # CAMERA FIX: User must manually choose to open the camera to prevent auto-loading
+            use_camera = st.checkbox("📷 ਕੈਮਰਾ ਖੋਲ੍ਹੋ (Click to Open Camera)")
+            p_photo = None
+            
+            if use_camera:
+                p_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Capture)")
+                if p_photo_cam: p_photo = p_photo_cam
+            else:
+                p_photo_file = st.file_uploader("ਜਾਂ ਪੁਰਾਣੀ ਫਾਈਲ ਅੱਪਲੋਡ ਕਰੋ (Upload from Device)", type=['png', 'jpg', 'jpeg'])
+                if p_photo_file: p_photo = p_photo_file
             
             if st.form_submit_button("ਪਰਚੀ ਸੇਵ ਕਰੋ (Save Prescription)", type="primary") and p_name:
                 photo_str = compress_image(p_photo)
@@ -577,7 +760,7 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
         else: st.info(f"ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ ({cb}).")
 
 # ==========================================
-# 4. LEDGERS & CA REPORTS
+# LEDGERS & CA REPORTS
 # ==========================================
 elif st.session_state.current_tab == "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ CA ਰਿਪੋਰਟਾਂ":
     st.header(f"🏦 {cb} - ਬੈਲੇਂਸ ਸ਼ੀਟ ਅਤੇ CA ਰਿਪੋਰਟਾਂ")
