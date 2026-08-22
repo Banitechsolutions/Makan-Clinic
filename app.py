@@ -93,6 +93,22 @@ st.markdown("""
 # ==========================================
 # ROBUST LOGO AUTO-DETECTION HELPERS
 # ==========================================
+def get_base64_image(image_path):
+    if image_path and os.path.exists(image_path):
+        try:
+            with open(image_path, "rb") as img_file:
+                return base64.b64encode(img_file.read()).decode()
+        except Exception:
+            return ""
+    return ""
+
+def get_clinic_logo_path():
+    possible_names = ["logo.png", "logo.jpg", "logo.jpeg", "logo.svg"]
+    for fname in possible_names:
+        if os.path.exists(fname):
+            return fname
+    return None
+
 def get_bani_logo_path():
     possible_names = [
         "Bani Tech", "Bani Tech.jpeg", "Bani Tech.jpg", "Bani Tech.png",
@@ -110,23 +126,14 @@ def get_bani_logo_path():
         pass
     return None
 
-def get_bani_logo_base64():
-    logo_path = get_bani_logo_path()
-    if logo_path and os.path.exists(logo_path):
-        try:
-            with open(logo_path, "rb") as f:
-                return base64.b64encode(f.read()).decode()
-        except Exception:
-            return ""
-    return ""
-
 def display_bani_tech_logo():
     logo_path = get_bani_logo_path()
     if logo_path and os.path.exists(logo_path):
         st.image(logo_path, use_container_width=True)
 
 def get_bani_footer():
-    bani_logo_base64 = get_bani_logo_base64()
+    bani_path = get_bani_logo_path()
+    bani_logo_base64 = get_base64_image(bani_path) if bani_path else ""
     bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
     return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
 
@@ -138,12 +145,8 @@ def compress_image(uploaded_file, max_size=(800, 800)):
             buffered = io.BytesIO()
             img.convert("RGB").save(buffered, format="JPEG", quality=75)
             return base64.b64encode(buffered.getvalue()).decode("utf-8")
-        except Exception: return ""
-    return ""
-
-def get_base64_image(image_path):
-    if os.path.exists(image_path):
-        with open(image_path, "rb") as img_file: return base64.b64encode(img_file.read()).decode()
+        except Exception:
+            return ""
     return ""
 
 @st.cache_resource
@@ -154,12 +157,18 @@ try: supabase: Client = init_connection()
 except Exception: st.error("Supabase Connection Error.")
 
 def get_letterhead_header():
+    clinic_logo_path = get_clinic_logo_path()
+    logo_base64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
+    img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 80px;">' if logo_base64 else ''
+    
     return f"""
         <div style="display: flex; align-items: center; border-bottom: 2px solid #2E7D32; padding-bottom: 10px;">
-            <div style="flex: 1; text-align: center;">
+            <div style="flex: 1; text-align: left;">{img_html}</div>
+            <div style="flex: 4; text-align: center;">
                 <h1 style="color: #2E7D32; margin: 0; font-size: 24px; font-family: Arial, sans-serif;">{CLINIC_NAME}</h1>
                 <p style="background-color: #2E7D32; color: white; display: inline-block; padding: 4px 15px; font-size: 12px; margin: 8px 0 0 0; font-weight: bold; border-radius: 3px;">{CLINIC_ADDRESS}</p>
             </div>
+            <div style="flex: 1;"></div>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; line-height: 1.4;">
             <div style="text-align: left; color: #333;">
@@ -282,12 +291,22 @@ if 'current_tab' not in st.session_state:
 # PUBLIC LANDING PAGE & LOGIN
 # ==========================================
 if not st.session_state.logged_in:
-    # 1. Main Header Strip (Clean Text Header)
+    clinic_logo_path = get_clinic_logo_path()
+    clinic_logo_b64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
+    logo_html = f'<img src="data:image/png;base64,{clinic_logo_b64}" style="width: 85px; margin-bottom: 8px;">' if clinic_logo_b64 else ''
+    
+    # 1. Main Header Strip (Includes Clinic Logo cleanly)
     st.markdown(f"""
     <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        {logo_html}
         <h1 style="color: #2E7D32; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
         <p style="color: #555; font-size: 16px; margin: 5px 0 10px 0; font-weight: 500;">{CLINIC_ADDRESS}</p>
-        <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 6px 20px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">
+        <div style="margin: 15px 0;">
+            <a href="#book-online" style="display: inline-block; background-color: #0F4C81; color: white; padding: 10px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(15, 76, 129, 0.3);">
+                📅 Book Online Appointment
+            </a>
+        </div>
+        <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 8px 25px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">
             📞 Appointments: 79734-89915
         </div>
     </div>
@@ -324,30 +343,14 @@ if not st.session_state.logged_in:
             """, unsafe_allow_html=True)
         with card_col2:
             st.markdown("""
-            <div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2>
-                <h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3>
-                <p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;">
-                    <b style="color:#000;">Dental Surgeon</b><br><br><br>
-                    📱 <b>98720-45618</b>
-                </p>
-                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;">
-                    <ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;">
-                        <li>RCT & Implants</li>
-                        <li>Dentures (Partial & Complete)</li>
-                        <li>Tooth Coloured Fillings & Extractions</li>
-                        <li>Scaling, Braces & Smile Design</li>
-                    </ul>
-                </div>
-                <div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">
-                    🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
-                </div>
-            </div>
+            <div style="border-top: 5px solid #0F4C81; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);"><h2 style="color: #0F4C81; margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px dashed #eee; padding-bottom: 8px;">🦷 Dental Clinic</h2><h3 style="color: #333; margin: 0; font-size: 17px;">Dr. (Mrs.) Manmeet Makan</h3><p style="color: #666; font-size: 13px; line-height: 1.5; margin-top: 5px; min-height: 80px;"><b style="color:#000;">Dental Surgeon</b><br><br><br>📱 <b>98720-45618</b></p><div style="background-color: #f9f9f9; padding: 10px; border-radius: 8px;"><ul style="font-size: 13px; color: #555; margin: 0; padding-left: 15px; line-height: 1.5;"><li>RCT & Implants</li><li>Dentures (Partial & Complete)</li><li>Tooth Coloured Fillings & Extractions</li><li>Scaling, Braces & Smile Design</li></ul></div><div style="margin-top: 15px; font-size: 12px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 8px; border-radius: 5px; font-weight: bold;">🕒 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM</div></div>
             """, unsafe_allow_html=True)
             
         st.markdown("<div style='text-align: center; color: #d32f2f; font-weight: bold; font-size: 14px; margin-top: 15px;'>⚠️ Note: Clinic is closed on Sundays.</div>", unsafe_allow_html=True)
 
     with col_side:
+        st.markdown('<div id="book-online"></div>', unsafe_allow_html=True)
+        
         # Appointment Form
         st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
         with st.form("public_appointment_form", clear_on_submit=True):
@@ -436,7 +439,12 @@ except Exception: pass
 with st.sidebar:
     st.title("👤 ਪ੍ਰੋਫਾਈਲ (Profile)")
     st.success(f"✅ Logged in as: {st.session_state.role.upper()}")
-    st.markdown(f"<div style='background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #2E7D32; color: #2E7D32; font-weight: bold;'>Active: {cb}</div>", unsafe_allow_html=True)
+    
+    # Clinic Logo next to branch
+    clinic_logo_path = get_clinic_logo_path()
+    clinic_logo_b64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
+    sb_html = f'<img src="data:image/png;base64,{clinic_logo_b64}" style="width: 25px; vertical-align: middle; margin-right: 8px;">' if clinic_logo_b64 else ''
+    st.markdown(f"<div style='background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #2E7D32; color: #2E7D32; font-weight: bold;'>{sb_html}Active: {cb}</div>", unsafe_allow_html=True)
     
     # 🔴 FLASHING ALERT NOTIFICATION 🔴
     if pending_app_count > 0:
@@ -475,12 +483,16 @@ with st.sidebar:
 
     st.session_state.current_tab = st.radio("ਚੁਣੋ (Select Menu)", menu_options, index=current_idx, label_visibility="collapsed")
     
+    # Bani Tech Logo in Sidebar
     st.markdown("<br><br><hr>", unsafe_allow_html=True)
     display_bani_tech_logo()
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
 # --- INNER HEADER ---
-st.markdown(f"<div class='pro-header-flex'><div class='pro-text-box'><div class='pro-title'>{CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
+clinic_logo_path = get_clinic_logo_path()
+clinic_logo_b64 = get_base64_image(clinic_logo_path) if clinic_logo_path else ""
+hdr_logo_html = f'<img src="data:image/png;base64,{clinic_logo_b64}" style="width: 65px; margin-right: 15px;">' if clinic_logo_b64 else ''
+st.markdown(f"<div class='pro-header-flex'>{hdr_logo_html}<div class='pro-text-box'><div class='pro-title'>{CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
 
 # ==========================================
 # 0. HOME PAGE
@@ -544,7 +556,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else:
@@ -580,7 +592,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else:
