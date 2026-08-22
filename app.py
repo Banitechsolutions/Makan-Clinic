@@ -25,7 +25,7 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
 CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
@@ -40,12 +40,10 @@ EXPENSE_CATEGORIES = [
     "ਸਟਾਕ ਖਰੀਦ (Purchase of Stock)", "ਸਟਾਫ਼ ਦੀ ਤਨਖਾਹ (Payment to Staff)", "ਹੋਰ ਖਰਚੇ (Others)"
 ]
 
-# EXACT DENTAL TREATMENTS FROM LETTERHEAD
 DENTAL_TREATMENTS = [
     "RCT", "Implants", "Dentures - Partial", "Dentures - Complete", "Fixed Teeth", 
     "Tooth Coloured Fillings", "Extraction", "Scaling", "Smile Designing", "Braces", "Other Dental Procedures"
 ]
-# CHEST CLINIC SERVICES FROM LETTERHEAD
 CHEST_TREATMENTS = [
     "Asthma Clinic", "Allergy Clinic", "Cough Clinic", "T B Clinic", 
     "Patient Education Clinic", "Family Medicine", "Diabetes", "Hypertension", "Other Chest/Physician Consult"
@@ -74,11 +72,9 @@ st.markdown("""
         .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #2E7D32 !important; background-color: #e8f5e9 !important; color: #2E7D32 !important; transition: 0.3s; }
         .branch-btn > button:hover { background-color: #2E7D32 !important; color: white !important; }
         
-        /* WhatsApp Button */
         .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
         .whatsapp-btn:hover { background-color: #128C7E; }
         
-        /* Flashing Alert Animation */
         @keyframes flashAnim {
             0% { opacity: 1; background-color: #ffe6e6; }
             50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; }
@@ -86,7 +82,6 @@ st.markdown("""
         }
         .flashing-alert { animation: flashAnim 1.2s infinite; padding: 12px; background-color: #ffe6e6; border: 2px solid red; color: #cc0000; font-weight: bold; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 16px; }
         
-        /* Tables */
         .report-table { width: 100%; border-collapse: collapse; text-align: left; }
         .report-table th, .report-table td { border: 1px solid #aaa; padding: 8px; }
         .report-table th { background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }
@@ -120,6 +115,7 @@ try: supabase: Client = init_connection()
 except Exception: st.error("Supabase Connection Error.")
 
 def get_bani_footer():
+    # Calling exactly "Bani Tech" as requested
     bani_logo_base64 = get_base64_image("Bani Tech")
     bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
     return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
@@ -261,7 +257,8 @@ if not st.session_state.logged_in:
     logo_login_path = "logo.png"
     logo_html = f'<img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 110px; margin-bottom: 10px;">' if os.path.exists(logo_login_path) else ''
     
-    st.markdown(f"""
+    # Safe HTML construction without nested formatting
+    landing_header_html = f"""
     <div style="text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         {logo_html}
         <h1 style="color: #2E7D32; margin: 0; font-size: 40px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
@@ -270,7 +267,9 @@ if not st.session_state.logged_in:
             📞 Appointments: 79734-89915
         </div>
     </div>
+    """
     
+    cards_html = """
     <div style="display: flex; gap: 25px; margin-bottom: 40px; flex-wrap: wrap;">
         <!-- Chest Clinic Card -->
         <div style="flex: 1; min-width: 320px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 6px solid #2E7D32; transition: transform 0.3s;">
@@ -321,7 +320,10 @@ if not st.session_state.logged_in:
     <div style="text-align: center; color: #d32f2f; font-weight: bold; font-size: 16px; margin-bottom: 40px;">
         ⚠️ Note: Clinic is closed on Sundays.
     </div>
-    """, unsafe_allow_html=True)
+    """
+    
+    st.markdown(landing_header_html, unsafe_allow_html=True)
+    st.markdown(cards_html, unsafe_allow_html=True)
     
     tab_book, tab_login = st.tabs(["📅 Book Appointment (ਮਰੀਜ਼ਾਂ ਲਈ)", "🔐 Staff Login (ਸਟਾਫ ਲਾਗਇਨ)"])
     
@@ -606,8 +608,6 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
-                
-                # Dynamic Dropdown based on Clinic Branch from letterhead
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
                 else:
