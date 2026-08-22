@@ -25,7 +25,7 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
 CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
@@ -120,7 +120,7 @@ try: supabase: Client = init_connection()
 except Exception: st.error("Supabase Connection Error.")
 
 def get_bani_footer():
-    bani_logo_base64 = get_base64_image("bani_logo_2.jpeg")
+    bani_logo_base64 = get_base64_image("Bani Tech")
     bani_img_html = f'<img src="data:image/jpeg;base64,{bani_logo_base64}" style="height: 25px; vertical-align: middle; margin-right: 8px; border-radius: 4px;">' if bani_logo_base64 else ''
     return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
 
@@ -375,9 +375,9 @@ if not st.session_state.logged_in:
                     else: st.error("ਗਲਤ ਪਾਸਵਰਡ! (Incorrect Password!)")
     
     st.markdown("<br><hr>", unsafe_allow_html=True)
-    if os.path.exists("bani_logo_2.jpeg"):
+    if os.path.exists("Bani Tech"):
         bc1, bc2, bc3 = st.columns([1, 2, 1])
-        with bc2: st.image("bani_logo_2.jpeg", use_container_width=True)
+        with bc2: st.image("Bani Tech", use_container_width=True)
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
     st.stop()
 
@@ -459,7 +459,7 @@ with st.sidebar:
     st.session_state.current_tab = st.radio("ਚੁਣੋ (Select Menu)", menu_options, index=current_idx, label_visibility="collapsed")
     
     st.markdown("<br><br><hr>", unsafe_allow_html=True)
-    if os.path.exists("bani_logo_2.jpeg"): st.image("bani_logo_2.jpeg", use_container_width=True)
+    if os.path.exists("Bani Tech"): st.image("Bani Tech", use_container_width=True)
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
 # --- HEADER ---
@@ -527,7 +527,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_NAME}\n{CLINIC_ADDRESS}"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else:
@@ -565,7 +565,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_NAME}\n{CLINIC_ADDRESS}"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else:
@@ -590,7 +590,6 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
 elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡੀ (OPD Entry)":
     st.header(f"📝 {cb} - ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
     
-    # Dynamic Modes: Add Dental Treatment Tab ONLY if Dental Clinic is active
     modes = ["💰 ਓ.ਪੀ.ਡੀ ਫੀਸ (OPD Fee)"]
     if cb == "Dental Clinic": modes.append("🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Dental Treatment)")
     modes.extend(["📉 ਖਰਚਾ ਦਰਜ ਕਰੋ (Expense)", "🖨️ ਪੁਰਾਣੀ ਰਸੀਦ (Reprint)"])
@@ -608,7 +607,7 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
                 
-                # Dynamic Dropdown based on Clinic Branch
+                # Dynamic Dropdown based on Clinic Branch from letterhead
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਕੰਸਲਟੇਸ਼ਨ ਦਾ ਵੇਰਵਾ (Consultation Type)", CHEST_TREATMENTS)
                 else:
