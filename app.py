@@ -40,6 +40,9 @@ EXPENSE_CATEGORIES = [
     "ਸਟਾਕ ਖਰੀਦ (Purchase of Stock)", "ਸਟਾਫ਼ ਦੀ ਤਨਖਾਹ (Payment to Staff)", "ਹੋਰ ਖਰਚੇ (Others)"
 ]
 
+ASSET_TYPES = ["ਮੈਡੀਕਲ ਉਪਕਰਨ (Medical Equipment)", "ਫਰਨੀਚਰ (Furniture)", "ਇਲੈਕਟ੍ਰੋਨਿਕਸ (IT/Electronics)", "ਬਿਲਡਿੰਗ (Building)", "ਹੋਰ (Other)"]
+STOCK_UNITS = ["ਕਿਲੋ (Kg)", "ਲੀਟਰ (Liter)", "ਪੀਸ (Pcs)", "ਗ੍ਰਾਮ (Gram)", "ਬੋਕਸ (Boxes)"]
+
 DENTAL_TREATMENTS = [
     "RCT", "Implants", "Dentures - Partial", "Dentures - Complete", "Fixed Teeth", 
     "Tooth Coloured Fillings", "Extraction", "Scaling", "Smile Designing", "Braces", "Other Dental Procedures"
@@ -48,8 +51,6 @@ CHEST_TREATMENTS = [
     "Asthma Clinic", "Allergy Clinic", "Cough Clinic", "T B Clinic", 
     "Patient Education Clinic", "Family Medicine", "Diabetes", "Hypertension", "Other Chest/Physician Consult"
 ]
-
-STOCK_UNITS = ["ਕਿਲੋ (Kg)", "ਲੀਟਰ (Liter)", "ਪੀਸ (Pcs)", "ਗ੍ਰਾਮ (Gram)", "ਬੋਕਸ (Boxes)", "ਪੈਕਟ (Packets)"]
 
 TIME_SLOTS = [
     "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", 
@@ -98,32 +99,22 @@ def get_base64_image(image_path):
         try:
             with open(image_path, "rb") as img_file:
                 return base64.b64encode(img_file.read()).decode()
-        except Exception:
-            return ""
+        except Exception: return ""
     return ""
 
 def get_clinic_logo_path():
-    possible_names = ["logo.png", "logo.jpg", "logo.jpeg", "logo.svg"]
-    for fname in possible_names:
-        if os.path.exists(fname):
-            return fname
+    for fname in ["logo.png", "logo.jpg", "logo.jpeg", "logo.svg"]:
+        if os.path.exists(fname): return fname
     return None
 
 def get_bani_logo_path():
-    possible_names = [
-        "Bani Tech", "Bani Tech.jpeg", "Bani Tech.jpg", "Bani Tech.png",
-        "bani_logo_2.jpeg", "bani_logo_2.jpg", "bani_logo_2.png",
-        "bani_logo.jpeg", "bani_logo.jpg", "bani_logo.png"
-    ]
+    possible_names = ["Bani Tech", "Bani Tech.jpeg", "Bani Tech.png", "bani_logo_2.jpeg"]
     for fname in possible_names:
-        if os.path.exists(fname):
-            return fname
+        if os.path.exists(fname): return fname
     try:
         for f in os.listdir("."):
-            if f.lower().startswith("bani"):
-                return f
-    except Exception:
-        pass
+            if f.lower().startswith("bani"): return f
+    except Exception: pass
     return None
 
 def display_bani_tech_logo():
@@ -145,8 +136,7 @@ def compress_image(uploaded_file, max_size=(800, 800)):
             buffered = io.BytesIO()
             img.convert("RGB").save(buffered, format="JPEG", quality=75)
             return base64.b64encode(buffered.getvalue()).decode("utf-8")
-        except Exception:
-            return ""
+        except Exception: return ""
     return ""
 
 @st.cache_resource
@@ -206,7 +196,6 @@ def generate_html_receipt(receipt_no, name, phone, amount, date_str, payment_mod
     amount_text = f"Rs. {amount}/-"
     amount_in_words = f"Rupees {amount} Only" 
     display_phone = phone if phone else "________________"
-    
     header = get_letterhead_header()
     footer = get_letterhead_footer()
     bani_footer = get_bani_footer()
@@ -366,7 +355,6 @@ if not st.session_state.logged_in:
 
     with col_side:
         st.markdown('<div id="book-online"></div>', unsafe_allow_html=True)
-        
         st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
         with st.form("public_appointment_form", clear_on_submit=True):
             pub_branch = st.selectbox("Select Clinic", ["Chest Clinic", "Dental Clinic"])
@@ -481,7 +469,7 @@ with st.sidebar:
         "📉 ਖਰਚੇ (Expenses)",
         "🏦 ਖਾਤੇ, ਬੈਂਕ ਅਤੇ CA ਰਿਪੋਰਟਾਂ",
         "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)",
-        "📦 ਸਟਾਕ (Inventory)",
+        "📦 ਸਟਾਕ ਅਤੇ ਐਸੇਟਸ (Inventory & Assets)",
         "🩺 ਮਰੀਜ਼ ਰਿਕਾਰਡ (Patient Records)",
         "🧑‍💼 ਸਟਾਫ ਅਤੇ ਹਾਜ਼ਰੀ (Staff)"
     ]
@@ -630,8 +618,6 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
-                
-                # Dynamic Dropdown based on Clinic Branch
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਵੇਰਵਾ (Consultation/Treatment)", CHEST_TREATMENTS)
                 else:
@@ -673,39 +659,160 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
             else: st.error(f"❌ ਰਸੀਦ ਨਹੀਂ ਮਿਲੀ (Not found in {cb}).")
 
 # ==========================================
-# EXPENSES MODULE
+# 3. EXPENSES MODULE (INTEGRATED WITH STOCK/ASSETS)
 # ==========================================
 elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
     st.header(f"📉 {cb} - ਕਲੀਨਿਕ ਖਰਚੇ (Clinic Expenses)")
     
     with st.form("expense_form_dedicated", clear_on_submit=True):
         st.write("### ➕ ਨਵਾਂ ਖਰਚਾ ਦਰਜ ਕਰੋ (Add Expense)")
-        desc = st.text_input("ਖਰਚੇ ਦਾ ਵੇਰਵਾ (Expense Description)")
-        cat = st.selectbox("ਕੈਟਾਗਰੀ (Category)", [c for c in EXPENSE_CATEGORIES if not c.startswith("---")])
-        exp_amount = st.number_input("ਰਕਮ (Amount ₹)", min_value=1.0)
-        bank_acc_exp = st.selectbox("ਬੈਂਕ ਖਾਤਾ (Bank Account)", BANK_ACCOUNTS)
-        exp_date = st.date_input("ਮਿਤੀ (Date)", value=date.today())
+        col_e1, col_e2 = st.columns(2)
+        with col_e1:
+            desc = st.text_input("ਖਰਚੇ ਦਾ ਵੇਰਵਾ (Expense Description)*")
+            exp_amount = st.number_input("ਰਕਮ (Amount ₹)*", min_value=1.0)
+            exp_date = st.date_input("ਮਿਤੀ (Date)", value=date.today())
+        with col_e2:
+            cat = st.selectbox("ਕੈਟਾਗਰੀ (Category)", [c for c in EXPENSE_CATEGORIES if not c.startswith("---")])
+            bank_acc_exp = st.selectbox("ਬੈਂਕ ਖਾਤਾ (Bank Account)", BANK_ACCOUNTS)
+            
+        st.markdown("---")
+        st.write("**📦 ਕੀ ਤੁਸੀਂ ਖਰੀਦੇ ਗਏ ਸਮਾਨ ਨੂੰ ਸਟਾਕ ਜਾਂ ਐਸੇਟ (Asset) ਵਿੱਚ ਜੋੜਨਾ ਚਾਹੁੰਦੇ ਹੋ? (Optional)**")
+        add_to = st.radio("ਐਕਸ਼ਨ ਚੁਣੋ (Select Action):", ["ਕਿਤੇ ਨਹੀਂ (No, just save regular expense)", "📦 ਸਟਾਕ ਵਿੱਚ ਜੋੜੋ (Add to Inventory)", "🏢 ਪੱਕੀ ਸੰਪਤੀ (Add to Fixed Assets)"], horizontal=True)
         
-        if st.form_submit_button("ਖਰਚਾ ਸੇਵ ਕਰੋ (Save Expense)", type="primary") and desc:
-            supabase.table("expenses").insert({
-                "description": desc, "amount": exp_amount, "date": str(exp_date), 
-                "category": cat, "bank_account": bank_acc_exp, "add_to_mirror": True, "clinic_branch": cb
-            }).execute()
-            st.success("✅ ਖਰਚਾ ਸੇਵ ਹੋ ਗਿਆ!")
-            time.sleep(1); st.rerun()
+        col_sa1, col_sa2, col_sa3 = st.columns(3)
+        with col_sa1:
+            item_name_input = st.text_input("ਸਮਾਨ/ਸੰਪਤੀ ਦਾ ਨਾਮ (Item/Asset Name)")
+        with col_sa2:
+            item_qty = st.number_input("ਮਾਤਰਾ (Quantity - For Stock Only)", min_value=0.0, step=0.5)
+        with col_sa3:
+            item_unit = st.selectbox("ਇਕਾਈ (Unit / Asset Type)", ["--- Stock Units ---"] + STOCK_UNITS + ["--- Asset Types ---"] + ASSET_TYPES)
+
+        if st.form_submit_button("ਖਰਚਾ ਸੇਵ ਕਰੋ (Save Expense)", type="primary"):
+            if desc:
+                # 1. Save general expense
+                supabase.table("expenses").insert({"description": desc, "amount": exp_amount, "date": str(exp_date), "category": cat, "bank_account": bank_acc_exp, "add_to_mirror": True, "clinic_branch": cb}).execute()
+                
+                # 2. Add to Stock Inventory
+                if "Inventory" in add_to and item_name_input and item_qty > 0:
+                    try:
+                        res = supabase.table("stock").select("*").eq("item_name", item_name_input).eq("clinic_branch", cb).execute()
+                        if res.data:
+                            new_qty = float(res.data[0]['quantity']) + float(item_qty)
+                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", item_name_input).eq("clinic_branch", cb).execute()
+                        else:
+                            supabase.table("stock").insert({"item_name": item_name_input, "quantity": item_qty, "unit": item_unit, "last_updated": str(datetime.now()), "clinic_branch": cb}).execute()
+                        supabase.table("stock_logs").insert({"action": "Purchased via Expense", "item_name": item_name_input, "quantity": item_qty, "date": str(exp_date), "clinic_branch": cb}).execute()
+                        st.success(f"✅ {item_qty} {item_unit} '{item_name_input}' ਸਟਾਕ ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ!")
+                    except Exception: st.error("Database Error: Ensure 'stock' and 'stock_logs' tables exist.")
+                
+                # 3. Add to Fixed Assets
+                elif "Fixed Assets" in add_to and item_name_input:
+                    try:
+                        supabase.table("fixed_assets").insert({"asset_name": item_name_input, "asset_type": item_unit, "purchase_date": str(exp_date), "amount": exp_amount, "clinic_branch": cb}).execute()
+                        st.success(f"✅ '{item_name_input}' Fixed Assets ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ!")
+                    except Exception: st.error("Database Error: Ensure 'fixed_assets' table exists.")
+                
+                st.success("✅ ਖਰਚਾ ਸੇਵ ਹੋ ਗਿਆ!")
+                time.sleep(1); st.rerun()
+            else: st.error("ਖਰਚੇ ਦਾ ਵੇਰਵਾ ਭਰਨਾ ਜ਼ਰੂਰੀ ਹੈ। (Expense Description required)")
             
     st.markdown("---")
     st.write(f"### 📋 ਪਿਛਲੇ ਖਰਚੇ (Recent Expenses in {cb})")
     try: exp_data = supabase.table("expenses").select("*").eq("clinic_branch", cb).order("date", desc=True).limit(50).execute().data or []
     except Exception: exp_data = []
-    
     if exp_data:
         df_exp = pd.DataFrame(exp_data)[['date', 'description', 'category', 'amount', 'bank_account']]
         st.dataframe(df_exp, hide_index=True, use_container_width=True)
     else: st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
 
 # ==========================================
-# DOCTOR PRESCRIPTION MODULE
+# 4. INVENTORY / ASSETS MODULE (NEW)
+# ==========================================
+elif st.session_state.current_tab == "📦 ਸਟਾਕ ਅਤੇ ਐਸੇਟਸ (Inventory & Assets)":
+    st.header(f"📦 {cb} - ਸਟਾਕ ਮੈਨੇਜਮੈਂਟ (Inventory & Assets)")
+    
+    st_tab1, st_tab2, st_tab3, st_tab4 = st.tabs(["📤 ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", "📊 ਮੌਜੂਦਾ ਸਟਾਕ (Current Stock)", "🏢 ਪੱਕੀ ਸੰਪਤੀ (Fixed Assets)", "➕ ਪੁਰਾਣਾ ਸਟਾਕ (Direct Add)"])
+    
+    with st_tab1:
+        st.info("💡 **ਨੋਟ:** ਕਲੀਨਿਕ ਦੇ ਅੰਦਰ ਵਰਤੋਂ ਲਈ ਸਟਾਕ ਜਾਰੀ ਕਰੋ। (Issue for Internal Clinic Use Only)")
+        try: current_stock = supabase.table("stock").select("*").eq("clinic_branch", cb).gt("quantity", 0).execute().data or []
+        except: current_stock = []
+        
+        if current_stock:
+            with st.form("issue_stock_form", clear_on_submit=True):
+                stock_dict = {item['item_name']: item['quantity'] for item in current_stock}
+                col_is1, col_is2 = st.columns(2)
+                with col_is1:
+                    issue_item = st.selectbox("ਸਮਾਨ ਚੁਣੋ (Select Item)", list(stock_dict.keys()))
+                    issued_to = st.text_input("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ? (Issued To - Doctor/Room)*")
+                with col_is2:
+                    issue_qty = st.number_input(f"ਮਾਤਰਾ (Quantity to Issue)", min_value=0.5, step=0.5)
+                    st.write(f"*ਮੌਜੂਦ ਸਟਾਕ (Available): {stock_dict.get(issue_item, 0)}*")
+                
+                if st.form_submit_button("ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", type="primary"):
+                    if issued_to:
+                        if issue_qty <= stock_dict[issue_item]:
+                            new_qty = stock_dict[issue_item] - issue_qty
+                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", issue_item).eq("clinic_branch", cb).execute()
+                            supabase.table("stock_logs").insert({"action": f"Issued to {issued_to}", "item_name": issue_item, "quantity": float(issue_qty), "date": str(date.today()), "clinic_branch": cb}).execute()
+                            st.success(f"✅ {issue_qty} '{issue_item}' {issued_to} ਨੂੰ ਜਾਰੀ ਕੀਤਾ ਗਿਆ!")
+                            time.sleep(1); st.rerun()
+                        else: st.error("❌ ਇੰਨਾ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ! (Not enough stock)")
+                    else: st.error("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ ਹੈ, ਉਹ ਨਾਮ ਭਰੋ।")
+        else: st.warning("ਜਾਰੀ ਕਰਨ ਲਈ ਕੋਈ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ। (No stock available)")
+
+    with st_tab2:
+        st.write("### 📊 ਮੌਜੂਦਾ ਸਟਾਕ ਰਿਪੋਰਟ (Current Stock Report)")
+        try: stock_list = supabase.table("stock").select("*").eq("clinic_branch", cb).execute().data or []
+        except: stock_list = []
+        if stock_list:
+            df_stock = pd.DataFrame(stock_list)[['item_name', 'quantity', 'unit', 'last_updated']]
+            st.dataframe(df_stock, hide_index=True, use_container_width=True)
+        else: st.info("ਸਟਾਕ ਖਾਲੀ ਹੈ।")
+        
+        st.markdown("---")
+        st.write("### 📜 ਸਟਾਕ ਹਿਸਟਰੀ (Stock Logs)")
+        try: stock_logs = supabase.table("stock_logs").select("*").eq("clinic_branch", cb).order("id", desc=True).limit(50).execute().data or []
+        except: stock_logs = []
+        if stock_logs:
+            df_logs = pd.DataFrame(stock_logs)[['date', 'action', 'item_name', 'quantity']]
+            st.dataframe(df_logs, hide_index=True, use_container_width=True)
+
+    with st_tab3:
+        st.write("### 🏢 ਕਲੀਨਿਕ ਦੀ ਪੱਕੀ ਸੰਪਤੀ (Fixed Assets)")
+        st.info("💡 ਇਹ ਉਹ ਸਮਾਨ ਹੈ ਜੋ ਕਲੀਨਿਕ ਵਿੱਚ ਹਮੇਸ਼ਾ ਰਹਿੰਦਾ ਹੈ (ਜਿਵੇਂ ਮਸ਼ੀਨਾਂ, ਫਰਨੀਚਰ)। ਇਹ Expenses ਰਾਹੀਂ ਆਟੋਮੈਟਿਕ ਦਰਜ ਹੁੰਦਾ ਹੈ।")
+        try: assets_list = supabase.table("fixed_assets").select("*").eq("clinic_branch", cb).execute().data or []
+        except: assets_list = []
+        if assets_list:
+            df_assets = pd.DataFrame(assets_list)[['purchase_date', 'asset_name', 'asset_type', 'amount']]
+            st.dataframe(df_assets, hide_index=True, use_container_width=True)
+        else: st.info("ਕੋਈ ਐਸੇਟ ਰਿਕਾਰਡ ਨਹੀਂ ਹੈ।")
+
+    with st_tab4:
+        st.info("💡 **ਨੋਟ:** ਇੱਥੇ ਸਿਰਫ਼ ਉਹ ਪੁਰਾਣਾ ਸਟਾਕ ਦਰਜ ਕਰੋ ਜੋ Expenses ਰਾਹੀਂ ਨਹੀਂ ਆਇਆ।")
+        with st.form("direct_stock_form", clear_on_submit=True):
+            col_ds1, col_ds2 = st.columns(2)
+            with col_ds1:
+                d_item_name = st.text_input("ਸਮਾਨ ਦਾ ਨਾਮ (Item Name)*")
+                d_qty = st.number_input("ਮਾਤਰਾ (Quantity)*", min_value=0.5, step=0.5)
+            with col_ds2:
+                d_unit = st.selectbox("ਇਕਾਈ (Unit)", STOCK_UNITS)
+            
+            if st.form_submit_button("ਸਿੱਧਾ ਸਟਾਕ ਵਿੱਚ ਜੋੜੋ (Add Direct Stock)", type="primary") and d_item_name:
+                try:
+                    res = supabase.table("stock").select("*").eq("item_name", d_item_name).eq("clinic_branch", cb).execute()
+                    if res.data:
+                        new_qty = float(res.data[0]['quantity']) + float(d_qty)
+                        supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", d_item_name).eq("clinic_branch", cb).execute()
+                    else:
+                        supabase.table("stock").insert({"item_name": d_item_name, "quantity": float(d_qty), "unit": d_unit, "last_updated": str(datetime.now()), "clinic_branch": cb}).execute()
+                    supabase.table("stock_logs").insert({"action": "Directly Added", "item_name": d_item_name, "quantity": float(d_qty), "date": str(date.today()), "clinic_branch": cb}).execute()
+                    st.success(f"✅ ਸਟਾਕ ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ!")
+                    time.sleep(1); st.rerun()
+                except Exception: st.error("Database Error.")
+
+# ==========================================
+# 5. DOCTOR PRESCRIPTION MODULE
 # ==========================================
 elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)":
     st.header(f"📝 {cb} - ਡਾਕਟਰ ਪਰਚੀ ਅਤੇ ਨੋਟਸ (Prescription & Findings)")
@@ -722,7 +829,6 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
             st.write("📸 **ਪਰਚੀ ਜਾਂ X-Ray ਦੀ ਫੋਟੋ (Prescription / X-Ray Photo)**")
             use_camera = st.checkbox("📷 ਕੈਮਰਾ ਖੋਲ੍ਹੋ (Click to Open Camera)")
             p_photo = None
-            
             if use_camera:
                 p_photo_cam = st.camera_input("ਸਿੱਧਾ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਖਿੱਚੋ (Capture)")
                 if p_photo_cam: p_photo = p_photo_cam
@@ -747,91 +853,6 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
                     st.write(f"**Findings:** {pr.get('findings', 'N/A')}")
                     if pr.get('photo_base64'): st.image(base64.b64decode(pr['photo_base64']), use_container_width=True)
         else: st.info(f"ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ ({cb}).")
-
-# ==========================================
-# INVENTORY / STOCK MODULE (NEW)
-# ==========================================
-elif st.session_state.current_tab == "📦 ਸਟਾਕ (Inventory)":
-    st.header(f"📦 {cb} - ਸਟਾਕ ਮੈਨੇਜਮੈਂਟ (Inventory)")
-    
-    st_tab1, st_tab2, st_tab3 = st.tabs(["➕ ਸਟਾਕ ਖਰੀਦੋ (Add Purchased Stock)", "📤 ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", "📊 ਸਟਾਕ ਰਿਪੋਰਟ (Current Stock)"])
-    
-    with st_tab1:
-        st.info("💡 **ਨੋਟ:** ਇੱਥੇ ਸਿਰਫ਼ ਖਰੀਦਿਆ ਗਿਆ ਸਟਾਕ (Purchased Stock) ਦਰਜ ਕਰੋ।")
-        with st.form("add_stock_form", clear_on_submit=True):
-            col_s1, col_s2 = st.columns(2)
-            with col_s1:
-                item_name = st.text_input("ਸਮਾਨ ਦਾ ਨਾਮ (Item Name)*")
-                qty = st.number_input("ਮਾਤਰਾ (Quantity)*", min_value=0.5, step=0.5)
-            with col_s2:
-                unit = st.selectbox("ਇਕਾਈ (Unit)", STOCK_UNITS)
-                pur_date = st.date_input("ਖਰੀਦਣ ਦੀ ਮਿਤੀ (Date)", value=date.today())
-            
-            if st.form_submit_button("ਸਟਾਕ ਵਿੱਚ ਜੋੜੋ (Add to Stock)", type="primary"):
-                if item_name:
-                    try:
-                        res = supabase.table("stock").select("*").eq("item_name", item_name).eq("clinic_branch", cb).execute()
-                        if res.data:
-                            new_qty = float(res.data[0]['quantity']) + float(qty)
-                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", item_name).eq("clinic_branch", cb).execute()
-                        else:
-                            supabase.table("stock").insert({"item_name": item_name, "quantity": float(qty), "unit": unit, "last_updated": str(datetime.now()), "clinic_branch": cb}).execute()
-                        
-                        supabase.table("stock_logs").insert({"action": "Purchased", "item_name": item_name, "quantity": float(qty), "date": str(pur_date), "clinic_branch": cb}).execute()
-                        st.success(f"✅ {qty} {unit} '{item_name}' ਸਟਾਕ ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ!")
-                        time.sleep(1); st.rerun()
-                    except Exception as e: st.error("Database Error: Ensure 'stock' and 'stock_logs' tables exist.")
-                else: st.error("ਸਮਾਨ ਦਾ ਨਾਮ ਭਰਨਾ ਜ਼ਰੂਰੀ ਹੈ।")
-
-    with st_tab2:
-        st.info("💡 **ਨੋਟ:** ਕਲੀਨਿਕ ਦੇ ਅੰਦਰ ਵਰਤੋਂ ਲਈ ਸਟਾਕ ਜਾਰੀ ਕਰੋ। (Issue for Clinic Use Only - No Public Distribution)")
-        try: current_stock = supabase.table("stock").select("*").eq("clinic_branch", cb).gt("quantity", 0).execute().data or []
-        except: current_stock = []
-        
-        if current_stock:
-            with st.form("issue_stock_form", clear_on_submit=True):
-                stock_dict = {item['item_name']: item['quantity'] for item in current_stock}
-                
-                col_is1, col_is2 = st.columns(2)
-                with col_is1:
-                    issue_item = st.selectbox("ਸਮਾਨ ਚੁਣੋ (Select Item)", list(stock_dict.keys()))
-                    issued_to = st.text_input("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ? (Issued To - Doctor/Room)*")
-                with col_is2:
-                    issue_qty = st.number_input(f"ਮਾਤਰਾ (Quantity to Issue)", min_value=0.5, step=0.5)
-                    st.write(f"*ਮੌਜੂਦ ਸਟਾਕ (Available): {stock_dict.get(issue_item, 0)}*")
-                
-                if st.form_submit_button("ਸਟਾਕ ਜਾਰੀ ਕਰੋ (Issue Stock)", type="primary"):
-                    if issued_to:
-                        if issue_qty <= stock_dict[issue_item]:
-                            new_qty = stock_dict[issue_item] - issue_qty
-                            supabase.table("stock").update({"quantity": new_qty, "last_updated": str(datetime.now())}).eq("item_name", issue_item).eq("clinic_branch", cb).execute()
-                            supabase.table("stock_logs").insert({"action": f"Issued to {issued_to}", "item_name": issue_item, "quantity": float(issue_qty), "date": str(date.today()), "clinic_branch": cb}).execute()
-                            st.success(f"✅ {issue_qty} '{issue_item}' {issued_to} ਨੂੰ ਜਾਰੀ ਕੀਤਾ ਗਿਆ!")
-                            time.sleep(1); st.rerun()
-                        else: st.error("❌ ਇੰਨਾ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ! (Not enough stock)")
-                    else: st.error("ਕਿਸਨੂੰ ਜਾਰੀ ਕੀਤਾ ਹੈ, ਉਹ ਨਾਮ ਭਰੋ।")
-        else: st.warning("ਜਾਰੀ ਕਰਨ ਲਈ ਕੋਈ ਸਟਾਕ ਮੌਜੂਦ ਨਹੀਂ ਹੈ। (No stock available)")
-
-    with st_tab3:
-        st.write("### 📊 ਮੌਜੂਦਾ ਸਟਾਕ ਰਿਪੋਰਟ (Current Stock Report)")
-        try: stock_list = supabase.table("stock").select("*").eq("clinic_branch", cb).execute().data or []
-        except: stock_list = []
-        
-        if stock_list:
-            df_stock = pd.DataFrame(stock_list)[['item_name', 'quantity', 'unit', 'last_updated']]
-            df_stock.columns = ["Item Name", "Quantity", "Unit", "Last Updated"]
-            st.dataframe(df_stock, hide_index=True, use_container_width=True)
-        else: st.info("ਸਟਾਕ ਖਾਲੀ ਹੈ। (Stock is empty)")
-        
-        st.markdown("---")
-        st.write("### 📜 ਸਟਾਕ ਹਿਸਟਰੀ (Stock Logs)")
-        try: stock_logs = supabase.table("stock_logs").select("*").eq("clinic_branch", cb).order("id", desc=True).limit(50).execute().data or []
-        except: stock_logs = []
-        
-        if stock_logs:
-            df_logs = pd.DataFrame(stock_logs)[['date', 'action', 'item_name', 'quantity']]
-            df_logs.columns = ["Date", "Action", "Item Name", "Quantity"]
-            st.dataframe(df_logs, hide_index=True, use_container_width=True)
 
 # ==========================================
 # LEDGERS & CA REPORTS
