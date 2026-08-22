@@ -67,7 +67,7 @@ st.markdown("""
         .branch-btn > button:hover { background-color: #0F4C81 !important; color: white !important; }
         
         /* WhatsApp Button */
-        .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box;}
+        .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
         .whatsapp-btn:hover { background-color: #128C7E; }
         
         /* Flashing Alert Animation */
@@ -428,7 +428,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ, ਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ। ਧੰਨਵਾਦ! (Your appointment is confirmed)."
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ, ਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (ਨੰਬਰ: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ। ਧੰਨਵਾਦ! (Your appointment is confirmed)."
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp ਭੇਜੋ (Send Confirmation)</a>', unsafe_allow_html=True)
             else:
@@ -457,12 +457,20 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
             m_reason = st.text_input("ਵੇਰਵਾ (Reason)")
             
             if st.form_submit_button("ਬੁੱਕ ਕਰੋ (Book Now)", type="primary") and m_name:
-                supabase.table("appointments").insert({
+                res = supabase.table("appointments").insert({
                     "patient_name": m_name, "phone": m_phone, "appointment_date": str(m_date),
                     "appointment_time": m_time, "reason": m_reason, "status": "Confirmed", "clinic_branch": cb
                 }).execute()
-                st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
-                time.sleep(1); st.rerun()
+                
+                if res.data:
+                    m_app_id = res.data[0]['id']
+                    st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
+                    if m_phone:
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ, ਤੁਹਾਡੀ Makan {cb} ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (ਨੰਬਰ: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ। ਧੰਨਵਾਦ! (Your appointment is confirmed)."
+                        wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
+                        st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp ਭੇਜੋ (Send Confirmation)</a>', unsafe_allow_html=True)
+                else:
+                    st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
 
     with app_tab4:
         st.write("### 🖨️ ਰੋਜ਼ਾਨਾ ਅਪਾਇੰਟਮੈਂਟ ਸ਼ੀਟ ਪ੍ਰਿੰਟ ਕਰੋ")
