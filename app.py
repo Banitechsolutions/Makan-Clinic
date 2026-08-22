@@ -259,9 +259,69 @@ if 'current_tab' not in st.session_state:
 # ==========================================
 if not st.session_state.logged_in:
     logo_login_path = "logo.png"
-    if os.path.exists(logo_login_path): 
-        st.markdown(f'<div style="text-align: center;"><img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 100px;"></div>', unsafe_allow_html=True)
-    st.markdown(f"<div style='text-align: center; margin-bottom: 20px;'><h2 style='color: #2E7D32;'>{CLINIC_NAME}</h2><p style='color: #fff; background-color: #2E7D32; display: inline-block; padding: 4px 15px; border-radius: 4px; font-weight: bold;'>Patient Appointment & Staff Portal</p></div>", unsafe_allow_html=True)
+    logo_html = f'<img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 110px; margin-bottom: 10px;">' if os.path.exists(logo_login_path) else ''
+    
+    st.markdown(f"""
+    <div style="text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        {logo_html}
+        <h1 style="color: #2E7D32; margin: 0; font-size: 40px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
+        <p style="color: #555; font-size: 18px; margin: 8px 0 20px 0; font-weight: 500;">{CLINIC_ADDRESS}</p>
+        <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 10px 25px; border-radius: 30px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(217, 43, 43, 0.3);">
+            📞 Appointments: 79734-89915
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 25px; margin-bottom: 40px; flex-wrap: wrap;">
+        <!-- Chest Clinic Card -->
+        <div style="flex: 1; min-width: 320px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 6px solid #2E7D32; transition: transform 0.3s;">
+            <h2 style="color: #2E7D32; margin: 0 0 15px 0; font-size: 24px; border-bottom: 2px dashed #eee; padding-bottom: 10px;">🫁 Chest Clinic</h2>
+            <h3 style="color: #333; margin: 0; font-size: 20px;">Dr. Harpreet Singh Makan</h3>
+            <p style="color: #666; font-size: 15px; line-height: 1.6; margin-top: 8px; min-height: 100px;">
+                <b style="color:#000;">MD, FICM</b><br>
+                Physician & Chest Consultant<br>
+                Medical Superintendent<br>(Mata Kaulan Ji Mission Hospital)<br>
+                📱 Mobile: <b>98150-45618</b>
+            </p>
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #2E7D32; font-size: 16px;">Treatments & Services:</h4>
+                <ul style="font-size: 15px; color: #555; margin: 0; padding-left: 20px; line-height: 1.6;">
+                    <li>Asthma, Allergy & Cough Clinic</li>
+                    <li>T.B. Clinic & Patient Education</li>
+                    <li>Family Medicine & General Physician</li>
+                    <li>Diabetes & Hypertension Management</li>
+                </ul>
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; color: #2E7D32; text-align: center; background: #e8f5e9; padding: 10px; border-radius: 5px; font-weight: bold;">
+                🕒 Timings: 9:00 AM - 10:00 AM | 5:00 PM - 6:30 PM
+            </div>
+        </div>
+
+        <!-- Dental Clinic Card -->
+        <div style="flex: 1; min-width: 320px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 6px solid #0F4C81; transition: transform 0.3s;">
+            <h2 style="color: #0F4C81; margin: 0 0 15px 0; font-size: 24px; border-bottom: 2px dashed #eee; padding-bottom: 10px;">🦷 Dental Clinic</h2>
+            <h3 style="color: #333; margin: 0; font-size: 20px;">Dr. (Mrs.) Manmeet Makan</h3>
+            <p style="color: #666; font-size: 15px; line-height: 1.6; margin-top: 8px; min-height: 100px;">
+                <b style="color:#000;">Dental Surgeon</b><br><br><br><br>
+                📱 Mobile: <b>98720-45618</b>
+            </p>
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #0F4C81; font-size: 16px;">Treatments & Services:</h4>
+                <ul style="font-size: 15px; color: #555; margin: 0; padding-left: 20px; line-height: 1.6;">
+                    <li>Root Canal Treatment (RCT) & Implants</li>
+                    <li>Dentures (Partial & Complete) & Fixed Teeth</li>
+                    <li>Tooth Coloured Fillings & Extractions</li>
+                    <li>Scaling, Braces & Smile Designing</li>
+                </ul>
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; color: #0F4C81; text-align: center; background: #e3f2fd; padding: 10px; border-radius: 5px; font-weight: bold;">
+                🕒 Timings: 10:00 AM - 1:00 PM | 5:00 PM - 6:30 PM
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center; color: #d32f2f; font-weight: bold; font-size: 16px; margin-bottom: 40px;">
+        ⚠️ Note: Clinic is closed on Sundays.
+    </div>
+    """, unsafe_allow_html=True)
     
     tab_book, tab_login = st.tabs(["📅 Book Appointment (ਮਰੀਜ਼ਾਂ ਲਈ)", "🔐 Staff Login (ਸਟਾਫ ਲਾਗਇਨ)"])
     
@@ -325,7 +385,7 @@ if not st.session_state.logged_in:
 # CLINIC BRANCH SELECTION PORTAL
 # ==========================================
 if st.session_state.logged_in and st.session_state.clinic_branch is None:
-    st.markdown("<h2 style='text-align: center; color: #2E7D32; margin-top: 50px;'>🏥 Select Clinic Branch</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; color: #2E7D32; margin-top: 50px;'>🏥 Select Clinic Branch</h2>", unsafe_allow_html=True)
     
     c1, c2, c3, c4 = st.columns([1, 2, 2, 1])
     with c2:
