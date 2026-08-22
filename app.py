@@ -25,7 +25,7 @@ USERS = {
     "emp1": {"password": "emp1", "role": "employee"}
 }
 
-st.set_page_config(page_title="Makan Clinic Manager", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="Makan Chest & Dental Clinic", page_icon="🏥", layout="wide")
 
 # --- ਕਲੀਨਿਕ ਦੇ ਵੇਰਵੇ (CLINIC DETAILS) ---
 CLINIC_NAME = "MAKAN CHEST & DENTAL CLINIC"
@@ -66,16 +66,18 @@ st.markdown("""
         [data-testid="stSidebar"] div[role="radiogroup"] label p { font-size: 18px !important; font-weight: 600 !important; padding-bottom: 5px; }
         h2 { font-size: 26px !important; font-weight: 700 !important; padding-bottom: 5px !important; }
         .pro-header-flex { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); padding: 15px 20px; border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: left;}
-        .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: left; display: inline-block;}
-        .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: left;}
+        .pro-title { font-size: 28px; font-weight: bold; color: #2E7D32 !important; margin: 0; letter-spacing: 0.5px; text-align: center;}
+        .pro-tagline { font-size: 15px; font-weight: bold; color: #ffffff !important; background-color: #2E7D32; padding: 4px 15px; border-radius: 4px; margin: 8px 0; text-align: center; display: inline-block;}
+        .pro-sub { font-size: 13px; font-weight: bold; color: #333 !important; margin: 0; text-align: center;}
         div.stButton > button { font-size: 18px !important; font-weight: bold !important; padding: 10px !important; border-radius: 8px !important; width: 100% !important; }
         .branch-btn > button { height: 140px !important; font-size: 26px !important; border: 3px solid #2E7D32 !important; background-color: #e8f5e9 !important; color: #2E7D32 !important; transition: 0.3s; }
         .branch-btn > button:hover { background-color: #2E7D32 !important; color: white !important; }
         
+        /* WhatsApp Button */
         .whatsapp-btn { display: inline-block; padding: 10px 20px; background-color: #25D366; color: white !important; text-align: center; text-decoration: none; font-size: 15px; border-radius: 8px; font-weight: bold; border: 1px solid #128C7E; width: 100%; box-sizing: border-box; margin-top: 10px;}
         .whatsapp-btn:hover { background-color: #128C7E; }
         
+        /* Flashing Alert Animation */
         @keyframes flashAnim {
             0% { opacity: 1; background-color: #ffe6e6; }
             50% { opacity: 0.7; background-color: #ffcccc; border-color: #cc0000; }
@@ -83,6 +85,7 @@ st.markdown("""
         }
         .flashing-alert { animation: flashAnim 1.2s infinite; padding: 12px; background-color: #ffe6e6; border: 2px solid red; color: #cc0000; font-weight: bold; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 16px; }
         
+        /* Tables */
         .report-table { width: 100%; border-collapse: collapse; text-align: left; }
         .report-table th, .report-table td { border: 1px solid #aaa; padding: 8px; }
         .report-table th { background-color: #e8f5e9; color: #2E7D32; font-weight: bold; }
@@ -122,17 +125,13 @@ def get_bani_footer():
     return f'<div class="bani-footer" style="text-align: center; font-size: 11px; margin-top: 15px; color: #888; font-weight: bold; padding-top: 10px; display: flex; justify-content: center; align-items: center;">{bani_img_html}Designed by Bani Tech Solutions | banitech.in</div>'
 
 def get_letterhead_header():
-    logo_base64 = get_base64_image("logo.png")
-    img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 80px;">' if logo_base64 else ''
-    
+    # If you ever want a logo on the printed receipts, you can add it here. Leaving it text-only to ensure it's clean.
     return f"""
         <div style="display: flex; align-items: center; border-bottom: 2px solid #2E7D32; padding-bottom: 10px;">
-            <div style="flex: 1; text-align: left;">{img_html}</div>
-            <div style="flex: 4; text-align: center;">
+            <div style="flex: 1; text-align: center;">
                 <h1 style="color: #2E7D32; margin: 0; font-size: 24px; font-family: Arial, sans-serif;">{CLINIC_NAME}</h1>
                 <p style="background-color: #2E7D32; color: white; display: inline-block; padding: 4px 15px; font-size: 12px; margin: 8px 0 0 0; font-weight: bold; border-radius: 3px;">{CLINIC_ADDRESS}</p>
             </div>
-            <div style="flex: 1;"></div>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; line-height: 1.4;">
             <div style="text-align: left; color: #333;">
@@ -252,16 +251,12 @@ if 'current_tab' not in st.session_state:
     st.session_state.current_tab = "🏠 ਹੋਮ ਪੇਜ (Home)"
 
 # ==========================================
-# PUBLIC LANDING PAGE & LOGIN (PC FIT LAYOUT)
+# PUBLIC LANDING PAGE & LOGIN
 # ==========================================
 if not st.session_state.logged_in:
-    logo_login_path = "logo.png"
-    logo_html = f'<img src="data:image/png;base64,{get_base64_image(logo_login_path)}" style="width: 90px; margin-bottom: 5px;">' if os.path.exists(logo_login_path) else ''
-    
-    # 1. Main Header Strip
+    # 1. Main Header Strip (REMOVED LOGO.PNG - CLEAN TEXT ONLY)
     st.markdown(f"""
     <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%); border-radius: 12px; border: 2px solid #2E7D32; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        {logo_html}
         <h1 style="color: #2E7D32; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 1px;">{CLINIC_NAME}</h1>
         <p style="color: #555; font-size: 16px; margin: 5px 0 10px 0; font-weight: 500;">{CLINIC_ADDRESS}</p>
         <div style="display: inline-block; background-color: #D92B2B; color: white; padding: 6px 20px; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(217, 43, 43, 0.3);">
@@ -270,7 +265,7 @@ if not st.session_state.logged_in:
     </div>
     """, unsafe_allow_html=True)
     
-    # 2. Main Layout Split (Left: Doctor Profiles, Right: Booking & Login)
+    # 2. Main Layout Split
     col_main, col_side = st.columns([1.5, 1], gap="large")
     
     with col_main:
@@ -364,7 +359,7 @@ if not st.session_state.logged_in:
                     st.rerun()
                 else: st.error("Incorrect Password!")
                 
-        # Bani Tech Logo and Footer on right column
+        # Bani Tech Logo
         st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         if os.path.exists("Bani Tech"):
             col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
@@ -413,21 +408,15 @@ except Exception: pass
 with st.sidebar:
     st.title("👤 ਪ੍ਰੋਫਾਈਲ (Profile)")
     st.success(f"✅ Logged in as: {st.session_state.role.upper()}")
+    st.info(f"📍 Active: {cb}")
     
-    # Logo next to Clinic Name
-    sb_logo = get_base64_image("logo.png")
-    sb_html = f'<img src="data:image/png;base64,{sb_logo}" style="width: 30px; vertical-align: middle; margin-right: 8px;">' if sb_logo else ''
-    st.markdown(f"<div style='background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #2E7D32; color: #2E7D32; font-weight: bold;'>{sb_html}Active: {cb}</div>", unsafe_allow_html=True)
-    
-    # 🔴 FLASHING ALERT NOTIFICATION 🔴
     if pending_app_count > 0:
         st.markdown(f"""
-            <div class="flashing-alert" style="margin-top: 15px;">
+            <div class="flashing-alert">
                 🚨 ਧਿਆਨ ਦਿਓ! <br><b>{pending_app_count}</b> ਨਵੀਆਂ ਅਪਾਇੰਟਮੈਂਟ ਬੇਨਤੀਆਂ ਆਈਆਂ ਹਨ!
             </div>
         """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🔄 Switch Clinic Branch"):
         st.session_state.clinic_branch = None
         st.rerun()
@@ -460,10 +449,8 @@ with st.sidebar:
     if os.path.exists("Bani Tech"): st.image("Bani Tech", use_container_width=True)
     st.markdown("<div style='text-align: center; font-size: 12px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
-# --- HEADER ---
-hdr_logo = get_base64_image("logo.png")
-hdr_logo_html = f'<img src="data:image/png;base64,{hdr_logo}" style="width: 70px; margin-right: 15px;">' if hdr_logo else ''
-st.markdown(f"<div class='pro-header-flex'>{hdr_logo_html}<div class='pro-text-box'><div class='pro-title'>🏥 {CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
+# --- INNER HEADER (REMOVED LOGO HERE AS WELL FOR CLEANLINESS) ---
+st.markdown(f"<div class='pro-header-flex'><div class='pro-text-box'><div class='pro-title'>🏥 {CLINIC_NAME}</div><div class='pro-tagline'>{cb.upper()} ENVIRONMENT</div></div></div>", unsafe_allow_html=True)
 
 # ==========================================
 # 0. HOME PAGE
@@ -504,7 +491,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
         if not df_app.empty:
             pending_app = df_app[df_app['status'] == 'Pending']
             if not pending_app.empty:
-                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone']
+                display_cols = ['id', 'appointment_date', 'appointment_time', 'patient_name', 'phone', 'reason']
                 st.dataframe(pending_app[display_cols], hide_index=True, use_container_width=True)
                 
                 st.markdown("---")
@@ -586,7 +573,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
 # 2. OPD ENTRY
 # ==========================================
 elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡੀ (OPD Entry)":
-    st.header(f"📝 {cb} - OPD ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
+    st.header(f"📝 {cb} - ਐਂਟਰੀ ਮੈਨੇਜਮੈਂਟ")
     
     modes = ["💰 ਓ.ਪੀ.ਡੀ ਫੀਸ (OPD Fee)"]
     if cb == "Dental Clinic": modes.append("🦷 ਡੈਂਟਲ ਟ੍ਰੀਟਮੈਂਟ ਫੀਸ (Dental Treatment)")
@@ -714,7 +701,7 @@ elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
         st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
 
 # ==========================================
-# DOCTOR PRESCRIPTION MODULE (CAMERA FIX)
+# DOCTOR PRESCRIPTION MODULE
 # ==========================================
 elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescriptions)":
     st.header(f"📝 {cb} - ਡਾਕਟਰ ਪਰਚੀ ਅਤੇ ਨੋਟਸ (Prescription & Findings)")
@@ -730,7 +717,6 @@ elif st.session_state.current_tab == "📝 ਡਾਕਟਰ ਪਰਚੀ (Prescri
             st.markdown("---")
             st.write("📸 **ਪਰਚੀ ਜਾਂ X-Ray ਦੀ ਫੋਟੋ (Prescription / X-Ray Photo)**")
             
-            # CAMERA FIX: User must manually choose to open the camera to prevent auto-loading
             use_camera = st.checkbox("📷 ਕੈਮਰਾ ਖੋਲ੍ਹੋ (Click to Open Camera)")
             p_photo = None
             
