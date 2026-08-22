@@ -58,11 +58,12 @@ TIME_SLOTS = [
 ]
 
 # ==========================================
-# CUSTOM CSS
+# CUSTOM CSS (MOBILE SIDEBAR FIX APPLIED)
 # ==========================================
 st.markdown("""
     <style>
-        #MainMenu {visibility: hidden;} header {visibility: hidden;} footer {visibility: hidden;}
+        #MainMenu {visibility: hidden;} footer {visibility: hidden;}
+        header {background-color: transparent !important;} /* Kept header visible so mobile menu button shows! */
         .stAppDeployButton {display:none !important;}
         [data-testid="stSidebar"] div[role="radiogroup"] label p { font-size: 18px !important; font-weight: 600 !important; padding-bottom: 5px; }
         h2 { font-size: 26px !important; font-weight: 700 !important; padding-bottom: 5px !important; }
@@ -355,6 +356,7 @@ if not st.session_state.logged_in:
 
     with col_side:
         st.markdown('<div id="book-online"></div>', unsafe_allow_html=True)
+        
         st.markdown("<h3 style='margin: 0 0 10px 0; color: #2E7D32; font-size: 20px;'>📅 Book Appointment</h3>", unsafe_allow_html=True)
         with st.form("public_appointment_form", clear_on_submit=True):
             pub_branch = st.selectbox("Select Clinic", ["Chest Clinic", "Dental Clinic"])
@@ -394,7 +396,8 @@ if not st.session_state.logged_in:
                 
         st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
-        with col_b2: display_bani_tech_logo()
+        with col_b2:
+            display_bani_tech_logo()
         st.markdown("<div style='text-align: center; font-size: 11px; color: #888;'>Designed by <b>Bani Tech Solutions</b><br><a href='https://banitech.in' target='_blank' style='color: #2E7D32; text-decoration: none;'>banitech.in</a></div>", unsafe_allow_html=True)
 
     st.stop()
@@ -548,7 +551,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                             target_pt = pending_app[pending_app['id'] == app_id].iloc[0]
                             pt_phone = str(target_pt['phone'])
                             if pt_phone:
-                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                                msg = f"ਸਤਿਕਾਰਯੋਗ {target_pt['patient_name']} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {app_id}) {target_pt['appointment_date']} ਨੂੰ {new_time} ਵਜੇ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                                 wa_url = f"https://wa.me/{pt_phone}?text={urllib.parse.quote(msg)}"
                                 st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
             else: st.info("ਕੋਈ ਪੈਂਡਿੰਗ ਬੇਨਤੀ ਨਹੀਂ ਹੈ।")
@@ -581,7 +584,7 @@ elif st.session_state.current_tab == "📅 ਅਪਾਇੰਟਮੈਂਟ (Appoi
                     m_app_id = res.data[0]['id']
                     st.success(f"✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ #{m_app_id} ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
                     if m_phone:
-                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ MAKAN CHEST & DENTAL CLINIC ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
+                        msg = f"ਸਤਿਕਾਰਯੋਗ {m_name} ਜੀ,\nਤੁਹਾਡੀ {CLINIC_NAME} ({cb}) ਵਿਖੇ ਅਪਾਇੰਟਮੈਂਟ (Booking No: {m_app_id}) {m_date} ਨੂੰ {m_time} ਵਜੇ ਬੁੱਕ ਹੋ ਗਈ ਹੈ।\n\n- {CLINIC_ADDRESS}\n📞 79734-89915"
                         wa_url = f"https://wa.me/{m_phone}?text={urllib.parse.quote(msg)}"
                         st.markdown(f'<a href="{wa_url}" target="_blank" class="whatsapp-btn">💬 ਮਰੀਜ਼ ਨੂੰ WhatsApp Confirmation ਭੇਜੋ</a>', unsafe_allow_html=True)
                 else: st.success("✅ ਮੈਨੂਅਲ ਅਪਾਇੰਟਮੈਂਟ ਕਨਫਰਮ ਹੋ ਗਈ ਹੈ!")
@@ -618,6 +621,7 @@ elif st.session_state.current_tab == "📝 ਰੋਜ਼ਾਨਾ ਓ.ਪੀ.ਡ�
                 patient_phone = st.text_input("ਫ਼ੋਨ ਨੰਬਰ (Phone Number)")
             with col_o2:
                 rec_no = st.number_input("ਰਸੀਦ ਨੰਬਰ (Receipt No)*", min_value=1, step=1)
+                
                 if cb == "Chest Clinic":
                     treatment = st.selectbox("ਵੇਰਵਾ (Consultation/Treatment)", CHEST_TREATMENTS)
                 else:
@@ -726,7 +730,7 @@ elif st.session_state.current_tab == "📉 ਖਰਚੇ (Expenses)":
     else: st.info("ਕੋਈ ਖਰਚਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।")
 
 # ==========================================
-# 4. INVENTORY / ASSETS MODULE (NEW)
+# 4. INVENTORY / ASSETS MODULE
 # ==========================================
 elif st.session_state.current_tab == "📦 ਸਟਾਕ ਅਤੇ ਐਸੇਟਸ (Inventory & Assets)":
     st.header(f"📦 {cb} - ਸਟਾਕ ਮੈਨੇਜਮੈਂਟ (Inventory & Assets)")
